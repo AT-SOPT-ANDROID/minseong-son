@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -58,12 +59,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.ButtonGrayColor
 
 class SignUpActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
         setContent {
             ATSOPTANDROIDTheme {
@@ -132,7 +135,8 @@ fun SignUpActivityScreen(
 
     Column(
         modifier = Modifier.fillMaxSize()
-            .padding(paddingValues),
+            .padding(paddingValues)
+            .padding(WindowInsets.ime.asPaddingValues()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -179,6 +183,7 @@ fun SignUpActivityScreen(
                 }
             },
             singleLine = true,
+            maxLines = 1,
             visualTransformation = when {
                 screenType && !pwIconState -> {
                     PasswordVisualTransformation()
@@ -228,9 +233,12 @@ fun SignUpActivityScreen(
                     trailingIcon = {
                         if (!screenType) {
                             if (emailValue.isNotEmpty()) {
-                                IconButton(onClick = {
-                                    emailValue = ""
-                                }) {
+                                IconButton(
+                                    onClick = {
+                                        emailValue = ""
+                                    },
+                                    interactionSource = interactionSource
+                                ) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
                                         contentDescription = "Clear",
@@ -239,7 +247,10 @@ fun SignUpActivityScreen(
                                 }
                             }
                         } else {
-                            IconButton(onClick = { pwIconState = !pwIconState }) {
+                            IconButton(
+                                onClick = { pwIconState = !pwIconState },
+                                interactionSource = interactionSource
+                            ) {
                                 Icon(
                                     painter = painterResource(
                                         if (pwIconState) R.drawable.baseline_remove_red_eye_24
@@ -284,7 +295,6 @@ fun SignUpActivityScreen(
 
         Button(
             onClick = {
-                Log.e("isValueCheck", isValueCheck)
                 if (!screenType) {
                     if (isValueCheck.split(" ").first().toBoolean()) {
                         screenType = !screenType
@@ -311,7 +321,8 @@ fun SignUpActivityScreen(
             modifier = Modifier
                 //.align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            interactionSource = interactionSource
         ) {
             Text(text = "다음", fontSize = 14.sp, color = Color.White)
         }

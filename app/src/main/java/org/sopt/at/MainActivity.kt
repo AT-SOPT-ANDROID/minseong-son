@@ -9,6 +9,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -34,6 +37,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,6 +57,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ATSOPTANDROIDTheme {
+                val interactionSource = remember { MutableInteractionSource() }
                 Scaffold(
                     topBar = {
                         Row (
@@ -62,7 +67,8 @@ class MainActivity : ComponentActivity() {
                             IconButton(
                                 onClick = {
                                     finish()
-                                }
+                                },
+                                interactionSource = interactionSource,
                             ) {
                                 Icon(
                                     Icons.AutoMirrored.Default.KeyboardArrowLeft,
@@ -86,7 +92,8 @@ class MainActivity : ComponentActivity() {
                             IconButton(
                                 onClick = {
                                     Toast.makeText(this@MainActivity, "다음 업데이트를 기대해주세요.", Toast.LENGTH_SHORT).show()
-                                }
+                                },
+                                interactionSource = interactionSource
                             ) {
                                 Icon(
                                     Icons.Default.Settings,
@@ -98,6 +105,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
                     HomeScreen(
+                        interactionSource = interactionSource,
                         profileEmail = email,
                         paddingValues = innerPadding
                     ) {
@@ -114,11 +122,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun HomeScreen(
+    interactionSource : MutableInteractionSource,
     profileEmail : String?,
     paddingValues: PaddingValues,
     onLogOutClick : () -> Unit
 ) {
-
     Column (
         modifier = Modifier.fillMaxSize().padding(paddingValues)
     ){
@@ -175,9 +183,21 @@ fun HomeScreen(
             modifier = Modifier
                 //.align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            interactionSource = interactionSource
         ) {
             Text(text = "로그아웃", fontSize = 14.sp, color = Color.White)
         }
     }
 }
+
+//리플 제거 확장함수
+fun Modifier.noRippleClickable(
+    enabled: Boolean = true,
+    onClick: () -> Unit
+): Modifier = this.clickable(
+    enabled = enabled,
+    interactionSource = null,
+    indication = null,
+    onClick = onClick
+)

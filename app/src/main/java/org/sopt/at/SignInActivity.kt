@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -50,6 +51,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
@@ -59,6 +62,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -66,6 +70,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import kotlinx.coroutines.launch
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.ButtonGrayColor
@@ -83,6 +88,7 @@ class SignInActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
         signUpLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -98,6 +104,7 @@ class SignInActivity : ComponentActivity() {
 
         setContent {
             ATSOPTANDROIDTheme {
+                val interactionSource = remember { MutableInteractionSource() }
                 Scaffold(
                     topBar = {
                         Row (
@@ -118,6 +125,7 @@ class SignInActivity : ComponentActivity() {
                     },
                     modifier = Modifier.fillMaxSize()) { innerPadding ->
                     SignInActivityScreen(
+                        interactionSource = interactionSource,
                         innerPadding,
                         onSignUpClick = {
                             val intent = Intent(this, SignUpActivity::class.java)
@@ -153,12 +161,15 @@ class SignInActivity : ComponentActivity() {
 
 @Composable
 fun SignInActivityScreen(
+    interactionSource : MutableInteractionSource,
     padding : PaddingValues,
     onSignUpClick : () -> Unit,
     onLoginClick : (String, String) -> String?
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
+    val emailFocusRequester = remember { FocusRequester() }
+    val pwFocusRequester = remember { FocusRequester() }
 
     var emailValue by remember {
         mutableStateOf("")
@@ -169,7 +180,7 @@ fun SignInActivityScreen(
     }
 
     Scaffold(
-        modifier = Modifier.padding(padding),
+        modifier = Modifier.padding(padding).padding(WindowInsets.ime.asPaddingValues()),
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) { innerPadding ->
         Column(
@@ -190,7 +201,9 @@ fun SignInActivityScreen(
                 value = emailValue,
                 type = LoginFieldType.EMAIL,
                 onTextChange = { emailValue = it },
-                onIconClick = { emailValue = "" }
+                onIconClick = { emailValue = "" },
+                focusRequester = emailFocusRequester,
+                nextFocusRequester = pwFocusRequester
             )
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -198,7 +211,8 @@ fun SignInActivityScreen(
                 value = pwValue,
                 type = LoginFieldType.PASSWORD,
                 onTextChange = { pwValue = it },
-                onIconClick = { }
+                onIconClick = { },
+                focusRequester = pwFocusRequester
             )
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -222,7 +236,8 @@ fun SignInActivityScreen(
                     } else {
                         ButtonGrayColor
                     }
-                )
+                ),
+                interactionSource = interactionSource
             ) {
                 Text(
                     text = "로그인하기",
@@ -231,7 +246,9 @@ fun SignInActivityScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            AccountSupport(onSignUpClick = { onSignUpClick() })
+            AccountSupport(
+                onSignUpClick = { onSignUpClick() }
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -266,7 +283,9 @@ fun SignInEditText(
     value: String,
     type: LoginFieldType,
     onTextChange: (String) -> Unit,
-    onIconClick: () -> Unit
+    onIconClick: () -> Unit,
+    focusRequester: FocusRequester = FocusRequester(),
+    nextFocusRequester: FocusRequester? = null
 ) {
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -276,17 +295,27 @@ fun SignInEditText(
         value = value,
         onValueChange = { onTextChange(it) },
         singleLine = true,
+        maxLines = 1,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .focusRequester(focusRequester),
         textStyle = TextStyle(
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 16.sp
         ),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = {
-            focusManager.clearFocus()
-        }),
+        keyboardOptions = KeyboardOptions(
+            imeAction = if (type == LoginFieldType.EMAIL) ImeAction.Next else ImeAction.Done,
+            keyboardType = if (type == LoginFieldType.EMAIL) KeyboardType.Email else KeyboardType.Password
+        ),
+        keyboardActions = KeyboardActions(
+            onNext = {
+                nextFocusRequester?.requestFocus()
+            },
+            onDone = {
+                focusManager.clearFocus()
+            }
+        ),
         visualTransformation = when {
             type == LoginFieldType.PASSWORD && !pwIconState -> PasswordVisualTransformation()
             else -> VisualTransformation.None
@@ -376,7 +405,7 @@ fun AccountSupport(
             text = "회원가입",
             fontSize = 14.sp,
             color = Color.Gray,
-            modifier = Modifier.clickable {
+            modifier = Modifier.noRippleClickable {
                 onSignUpClick()
             }
         )

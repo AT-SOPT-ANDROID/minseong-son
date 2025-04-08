@@ -21,11 +21,11 @@
             android:name=".SignUpActivity"
             android:exported="false"
             android:label="@string/title_activity_sign_up"
-            android:theme="@style/Theme.ATSOPTANDROID" />
+            android:theme="@style/Theme.ATSOPTANDROID"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".SignInActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.ATSOPTANDROID">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
