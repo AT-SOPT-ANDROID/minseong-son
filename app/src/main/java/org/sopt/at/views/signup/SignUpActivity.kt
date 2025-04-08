@@ -1,8 +1,7 @@
-package org.sopt.at
+package org.sopt.at.views.signup
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -60,6 +59,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import org.sopt.at.R
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.ButtonGrayColor
 
@@ -78,7 +78,7 @@ class SignUpActivity : ComponentActivity() {
                         ){
                             IconButton(
                                 onClick = {
-
+                                    finish()
                                 }
                             ) {
                                 Icon(

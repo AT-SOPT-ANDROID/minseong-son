@@ -1,14 +1,14 @@
-package org.sopt.at
+package org.sopt.at.views.signin
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -71,9 +71,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.sopt.at.R
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.ButtonGrayColor
+import org.sopt.at.utils.PreferenceDataStore
+import org.sopt.at.views.main.MainActivity
+import org.sopt.at.views.main.noRippleClickable
+import org.sopt.at.views.signup.SignUpActivity
 
 enum class LoginFieldType {
     EMAIL,
@@ -90,6 +97,33 @@ class SignInActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
+
+        /*lifecycleScope.launch {
+            PreferenceDataStore.getEmail(this@SignInActivity).collect { email ->
+                signUpEmail = email
+            }
+        }
+
+        lifecycleScope.launch {
+            PreferenceDataStore.getPassword(this@SignInActivity).collect { pw ->
+                signUpPw = pw
+            }
+        }*/
+
+        lifecycleScope.launch {
+            val email = PreferenceDataStore.getEmail(this@SignInActivity).first()
+            val pw = PreferenceDataStore.getPassword(this@SignInActivity).first()
+
+            Log.d("email", email.toString())
+            Log.d("pw", pw.toString())
+
+            if (email?.isNotEmpty() == true && pw?.isNotEmpty() == true) {
+                Toast.makeText(this@SignInActivity, "자동 로그인 되었습니다.", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@SignInActivity, MainActivity::class.java))
+                finish()
+            }
+        }
+
         signUpLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -98,7 +132,10 @@ class SignInActivity : ComponentActivity() {
                 signUpPw = result.data?.getStringExtra("pw")
 
                 // 여기서 받은 email, pw 활용
-                Log.d("SignUpdata", "받은 이메일: $signUpEmail / 패스워드: $signUpPw")
+                lifecycleScope.launch {
+                    signUpEmail?.let { PreferenceDataStore.setEmail(this@SignInActivity, it) }
+                    signUpPw?.let { PreferenceDataStore.setPassword(this@SignInActivity, it) }
+                }
             }
         }
 

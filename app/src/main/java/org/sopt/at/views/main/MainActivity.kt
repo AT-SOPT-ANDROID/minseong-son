@@ -1,4 +1,4 @@
-package org.sopt.at
+package org.sopt.at.views.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +36,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +47,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.sopt.at.R
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
+import org.sopt.at.utils.PreferenceDataStore
+import org.sopt.at.views.signin.SignInActivity
 
 class MainActivity : ComponentActivity() {
     private var email : String? = null
@@ -58,6 +62,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             ATSOPTANDROIDTheme {
                 val interactionSource = remember { MutableInteractionSource() }
+                val emailState by PreferenceDataStore.getEmail(this@MainActivity)
+                    .collectAsState(initial = "")
+
                 Scaffold(
                     topBar = {
                         Row (
@@ -106,7 +113,7 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     HomeScreen(
                         interactionSource = interactionSource,
-                        profileEmail = email,
+                        profileEmail = email ?: emailState,
                         paddingValues = innerPadding
                     ) {
                         val intent = Intent(this@MainActivity, SignInActivity::class.java).apply {
@@ -127,6 +134,7 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     onLogOutClick : () -> Unit
 ) {
+
     Column (
         modifier = Modifier.fillMaxSize().padding(paddingValues)
     ){
