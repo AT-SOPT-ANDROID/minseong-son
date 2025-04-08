@@ -114,9 +114,6 @@ class SignInActivity : ComponentActivity() {
             val email = PreferenceDataStore.getEmail(this@SignInActivity).first()
             val pw = PreferenceDataStore.getPassword(this@SignInActivity).first()
 
-            Log.d("email", email.toString())
-            Log.d("pw", pw.toString())
-
             if (email?.isNotEmpty() == true && pw?.isNotEmpty() == true) {
                 Toast.makeText(this@SignInActivity, "자동 로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this@SignInActivity, MainActivity::class.java))

@@ -47,6 +47,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import org.sopt.at.R
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.utils.PreferenceDataStore
@@ -116,6 +118,11 @@ class MainActivity : ComponentActivity() {
                         profileEmail = email ?: emailState,
                         paddingValues = innerPadding
                     ) {
+                        //로그아웃 시 클리어
+                        lifecycleScope.launch {
+                            PreferenceDataStore.setEmail(this@MainActivity, "")
+                            PreferenceDataStore.setPassword(this@MainActivity, "")
+                        }
                         val intent = Intent(this@MainActivity, SignInActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         }
