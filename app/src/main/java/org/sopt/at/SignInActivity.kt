@@ -49,15 +49,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
@@ -226,6 +232,30 @@ fun SignInActivityScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
             AccountSupport(onSignUpClick = { onSignUpClick() })
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = buildAnnotatedString {
+                    append("이 사이트는 Google reCAPCHA로 보호되며,\n")
+
+                    withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
+                        append("Google 개인정보 처리방침")
+                    }
+
+                    append("과 ")
+
+                    withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
+                        append("서비스 약관")
+                    }
+
+                    append("이 적용됩니다.")
+                },
+                fontSize = 14.sp,
+                color = Color.Gray,
+                modifier = Modifier.align(Alignment.CenterHorizontally).alpha(0.5f),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
