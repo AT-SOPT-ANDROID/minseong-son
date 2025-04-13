@@ -2,4 +2,14 @@
     <string name="app_name">AT SOPT ANDROID</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="home">HOME</string>
+    <string name="shorts">SHORTS</string>
+    <string name="live">LIVE</string>
+    <string name="search">SEARCH</string>
+    <string name="history">HISTORY</string>
+    
+    <string name="app_name_tving">TVING</string>
+    <string name="content_description_search">Search"></string>
+    <string name="content_description_camera">Camera</string>"
+    
 </resources>
