@@ -75,11 +75,11 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.sopt.at.R
+import org.sopt.at.extensions.noRippleClickable
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.ui.theme.ButtonGrayColor
 import org.sopt.at.utils.PreferenceDataStore
 import org.sopt.at.views.main.MainActivity
-import org.sopt.at.views.main.noRippleClickable
 import org.sopt.at.views.signup.SignUpActivity
 
 enum class LoginFieldType {
@@ -166,25 +166,21 @@ class SignInActivity : ComponentActivity() {
                             signUpLauncher.launch(intent)
                         },
                         onLoginClick = { email, pw ->
-                            when {
+                            val message = when {
                                 email == signUpEmail && pw == signUpPw -> {
-                                    val intent = Intent(this@SignInActivity, MainActivity::class.java).apply {
+                                    val intent = Intent(this, MainActivity::class.java).apply {
                                         flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                         putExtra("email", signUpEmail)
                                     }
                                     startActivity(intent)
-                                    null // 성공 시 snackbar 안 띄움
+                                    null
                                 }
-                                email == signUpEmail -> {
-                                    "비밀번호가 일치하지 않습니다."
-                                }
-                                pw == signUpPw -> {
-                                    "이메일이 일치하지 않습니다."
-                                }
-                                else -> {
-                                    "이메일과 비밀번호가 모두 일치하지 않습니다."
-                                }
+                                email == signUpEmail -> "비밀번호가 일치하지 않습니다."
+                                pw == signUpPw -> "이메일이 일치하지 않습니다."
+                                else -> "이메일과 비밀번호가 모두 일치하지 않습니다."
                             }
+                            message
+                            //Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                         }
                     )
                 }
@@ -271,7 +267,7 @@ fun SignInActivityScreen(
                         ButtonGrayColor
                     }
                 ),
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
             ) {
                 Text(
                     text = "로그인하기",
@@ -439,9 +435,11 @@ fun AccountSupport(
             text = "회원가입",
             fontSize = 14.sp,
             color = Color.Gray,
-            modifier = Modifier.noRippleClickable {
-                onSignUpClick()
-            }
+            modifier = Modifier.noRippleClickable(
+                onClick = {
+                    onSignUpClick()
+                }
+            )
         )
     }
 }
