@@ -7,9 +7,31 @@
     <string name="live">LIVE</string>
     <string name="search">SEARCH</string>
     <string name="history">HISTORY</string>
-    
+
+    <!--app name-->
     <string name="app_name_tving">TVING</string>
-    <string name="content_description_search">Search"></string>
-    <string name="content_description_camera">Camera</string>"
-    
+    <string name="app_name_login">TVING ID 로그인</string>
+
+    <!--home content description-->
+    <string name="home_banner_content_description">Home Banner</string>
+
+
+    <!--sign-->
+    <string name="btn_sign_in">로그인 하기</string>
+    <string name="btn_sign_up">회원가입</string>
+    <string name="btn_clear">전체 삭제</string>
+    <string name="btn_find_id">아이디 찾기</string>
+    <string name="btn_find_password">비밀번호 찾기</string>
+
+    <string name="hint_id">아이디</string>
+    <string name="hint_password">비밀번호</string>
+
+    <string name="password_gone_content_description">비밀번호 숨기기</string>
+    <string name="password_visible_content_description">비밀번호 보이기</string>
+
+    <string name="msg_wrong_password">비밀번호가 일치하지 않습니다.</string>
+    <string name="msg_wrong_email">이메일이 일치하지 않습니다.</string>
+    <string name="msg_wrong_both">이메일과 비밀번호가 모두 일치하지 않습니다.</string>
+
+
 </resources>
