@@ -68,8 +68,9 @@ fun MainBottomNavigation(
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Color.Blue,
-                    selectedTextColor = Color.Blue,
-                    indicatorColor = Color.White
+                    selectedTextColor = Color.White,
+                    unselectedIconColor = Color.Gray,
+                    indicatorColor = Color.Transparent
                 ),
                 interactionSource = NoRippleInteractionSource,
             )

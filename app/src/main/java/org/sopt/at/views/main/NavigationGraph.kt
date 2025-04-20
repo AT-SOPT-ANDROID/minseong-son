@@ -9,10 +9,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import org.sopt.at.viewmodels.HistoryViewModel
+import org.sopt.at.viewmodels.HomeViewModel
 import org.sopt.at.viewmodels.SignInViewModel
+import org.sopt.at.views.history.HistoryScreen
 import org.sopt.at.views.home.HomeScreen
+import org.sopt.at.views.live.LiveScreen
 import org.sopt.at.views.my.ProfileScreen
 import org.sopt.at.views.navigation.Route
+import org.sopt.at.views.search.SearchScreen
+import org.sopt.at.views.shorts.ShortsScreen
 import org.sopt.at.views.signin.SignInScreen
 import org.sopt.at.views.signup.SignUpScreen
 
@@ -20,7 +26,9 @@ import org.sopt.at.views.signup.SignUpScreen
 fun NavigationGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    signInViewModel: SignInViewModel = hiltViewModel()
+    signInViewModel: SignInViewModel = hiltViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
+    historyViewModel: HistoryViewModel = hiltViewModel(),
 ) {
     val isLoggedIn by signInViewModel.isLoggedIn.collectAsState()
 
@@ -44,12 +52,38 @@ fun NavigationGraph(
             )
         }
 
-
         //navigation 용
         composable(Route.HOME) {
             HomeScreen(
                 navController = navController,
+                modifier = modifier,
+
+            )
+        }
+
+        composable(Route.SHORTS) {
+            ShortsScreen(
                 modifier = modifier
+            )
+        }
+
+        composable(Route.LIVE) {
+            LiveScreen(
+                modifier = modifier
+            )
+        }
+
+        composable(Route.SEARCH) {
+            SearchScreen(
+                modifier = modifier
+            )
+        }
+
+        composable(Route.HISTORY) {
+            HistoryScreen(
+                navController = navController,
+                modifier = modifier,
+                viewModel = historyViewModel,
             )
         }
 
