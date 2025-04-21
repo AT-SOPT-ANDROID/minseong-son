@@ -1,6 +1,5 @@
 package org.sopt.at.core.utils
 
-import android.content.Context
 import android.util.Log
 import org.sopt.at.R
 import org.sopt.at.core.common.CommonConstants

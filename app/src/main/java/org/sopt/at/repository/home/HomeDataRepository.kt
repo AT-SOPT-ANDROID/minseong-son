@@ -1,6 +1,5 @@
 package org.sopt.at.repository.home
 
-import android.util.Log
 import org.sopt.at.R
 import org.sopt.at.core.common.CommonConstants
 import org.sopt.at.models.home.HomeBannerEntity
