@@ -30,7 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.at.R
 import org.sopt.at.components.dialogs.DialogType
 import org.sopt.at.components.dialogs.ExitDialog
-import org.sopt.at.components.tab.TabData
+import org.sopt.at.views.history.tab.HistoryTabData
 import org.sopt.at.components.topappbar.BackOnlyTopAppBar
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.viewmodels.HistoryViewModel
@@ -108,7 +108,7 @@ fun MainContent(
 
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
-            if (currentRoute == Route.HISTORY && historyTab == TabData.TAB_SERIES) {
+            if (currentRoute == Route.HISTORY && historyTab == HistoryTabData.TAB_SERIES) {
                 FloatingActionButton(
                     onClick = {
                         historyViewModel.openHistoryDialog(DialogType.DIALOG_TYPE_CREATE)
