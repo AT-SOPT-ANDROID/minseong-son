@@ -84,7 +84,10 @@ fun HistoryTabPagerScreen(
                     .align(Alignment.Start)
                     .clickable {
                         navController.navigate(Route.HOME) {
-                            popUpTo(Route.HOME)
+                            popUpTo(Route.HISTORY) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
                         }
                     }
             )
