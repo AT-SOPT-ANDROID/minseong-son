@@ -97,9 +97,9 @@ fun AtSoptTextField(
                 placeholder = {
                     Text(
                         text = if (type == LoginFieldType.EMAIL) {
-                            stringResource(R.string.hint_id)
+                            stringResource(R.string.msg_email)
                         } else {
-                            stringResource(R.string.hint_password)
+                            stringResource(R.string.msg_password)
                         },
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         fontSize = 14.sp
