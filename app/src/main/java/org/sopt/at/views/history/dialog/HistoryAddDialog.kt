@@ -18,6 +18,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,6 +59,10 @@ fun HistoryAddDialog(
         mutableStateOf(false)
     }
 
+    LaunchedEffect(historyTitle) {
+        isError = historyTitle.isNullOrEmpty()
+    }
+
     Dialog(
         onDismissRequest = {
             onDismiss()
@@ -80,8 +85,6 @@ fun HistoryAddDialog(
                     value = historyTitle ?: CommonConstants.EMPTY_STRING,
                     onValueChange = {
                         historyViewModel.setHistoryTitle(it)
-
-                        isError = it.isEmpty()
                     },
                     singleLine = false,
                     textStyle = TextStyle (
@@ -121,6 +124,7 @@ fun HistoryAddDialog(
                 ) {
                     Button(
                         onClick = {
+                            historyViewModel.clearHistoryTitle()
                             onDismiss()
                         },
                         shape = RectangleShape,
@@ -144,6 +148,7 @@ fun HistoryAddDialog(
                     Button(
                         onClick = {
                             if (!isError) {
+                                historyViewModel.clearHistoryTitle()
                                 onConfirm(
                                     HistoryEntity(
                                         id = 0,
