@@ -24,6 +24,7 @@ class HomeViewModel @Inject constructor(
     private val homeRepository: HomeDataRepository
 ) : ViewModel() {
     private val _homeTab = MutableStateFlow(HomeTabEntity(tab = CommonConstants.EMPTY_STRING))
+    val homeTab = _homeTab.asStateFlow()
 
     private val _route = MutableStateFlow(Route.HOME)
     val route = _route.asStateFlow()

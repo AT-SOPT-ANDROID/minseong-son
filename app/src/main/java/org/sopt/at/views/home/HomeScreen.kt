@@ -46,6 +46,7 @@ fun HomeScreen(
     val homeBannerDataList by homeViewModel.homeBannerDataList.collectAsState()
     val homeTopTwentyDataList = homeViewModel.getHomeTopTwentyItemList()
     val homeCurrentContentsDataList = homeViewModel.getHomeCurrentContentsItemList()
+    val homeTab by homeViewModel.homeTab.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
     val tabDataList by homeViewModel.tabDataList.collectAsState()
@@ -58,6 +59,10 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
         homeViewModel.fetchHomeTab(HomeTabEntity(tab = CommonConstants.EMPTY_STRING))
+    }
+
+    LaunchedEffect(homeTab) {
+        listState.animateScrollToItem(0)
     }
 
     LazyColumn (
@@ -83,7 +88,6 @@ fun HomeScreen(
                     coroutineScope.launch {
                         homeViewModel.fetchHomeTab(value)
                         pagerState.animateScrollToPage(index)
-                        listState.animateScrollToItem(0)
                     }
                 },
             )
