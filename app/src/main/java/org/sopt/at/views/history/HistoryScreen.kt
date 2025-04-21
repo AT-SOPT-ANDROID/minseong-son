@@ -97,11 +97,9 @@ fun HistoryScreen(
         HistoryAddDialog(
             onConfirm = { item ->
                 viewModel.addHistoryData(item)
-                viewModel.setHistoryTitle(CommonConstants.EMPTY_STRING)
                 viewModel.closeHistoryDialog(CommonConstants.EMPTY_STRING)
             },
             onDismiss = {
-                viewModel.setHistoryTitle(CommonConstants.EMPTY_STRING)
                 viewModel.closeHistoryDialog(CommonConstants.EMPTY_STRING)
             }
         )

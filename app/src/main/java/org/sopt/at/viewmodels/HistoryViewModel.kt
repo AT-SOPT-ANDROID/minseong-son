@@ -88,6 +88,10 @@ class HistoryViewModel @Inject constructor(
         _historyTitle.value = title
     }
 
+    fun clearHistoryTitle() {
+        _historyTitle.value = null
+    }
+
     fun addHistoryData(historyEntity: HistoryEntity) {
         _historyDataList.value = _historyDataList.value.toMutableList().apply {
             add(historyEntity)
