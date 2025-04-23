@@ -35,11 +35,11 @@ import org.sopt.at.ui.theme.DialogContainerColor
 
 @Composable
 fun AtSoptDialog(
+    item: HistoryEntity?,
     modifier: Modifier = Modifier,
-    item : HistoryEntity? = null,
-    textContent: @Composable () -> Unit,
     onConfirm: (HistoryEntity?) -> Unit,
     onDismiss: () -> Unit,
+    textContent: @Composable () -> Unit
 ) {
     Dialog(
         onDismissRequest = onDismiss,
@@ -128,7 +128,12 @@ fun AtSoptDialog(
 fun AtSoptDialogPreview() {
     ATSOPTANDROIDTheme {
         AtSoptDialog (
+            item = null,
             modifier = Modifier,
+            onConfirm = {
+            },
+            onDismiss = {
+            },
             textContent = {
                 Text(
                     text = stringResource(R.string.dialog_title_delete),
@@ -139,10 +144,6 @@ fun AtSoptDialogPreview() {
                     modifier = Modifier
                         .padding(16.dp)
                 )
-            },
-            onConfirm = {
-            },
-            onDismiss = {
             }
         )
     }

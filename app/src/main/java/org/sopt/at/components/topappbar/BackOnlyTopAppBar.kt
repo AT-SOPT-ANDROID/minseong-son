@@ -22,8 +22,8 @@ import org.sopt.at.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BackOnlyTopAppBar(
-    modifier: Modifier = Modifier,
     navController : NavController,
+    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
         modifier = modifier

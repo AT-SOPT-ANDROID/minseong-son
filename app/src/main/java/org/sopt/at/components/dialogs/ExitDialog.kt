@@ -21,7 +21,14 @@ fun ExitDialog(
     onDismiss: () -> Unit
 ) {
     AtSoptDialog(
+        item = null,
         modifier = modifier,
+        onConfirm = {
+            onConfirm()
+        },
+        onDismiss = {
+            onDismiss()
+        },
         textContent = {
             Text(
                 text = stringResource(R.string.dialog_title_exit),
@@ -32,12 +39,6 @@ fun ExitDialog(
                 modifier = modifier
                     .padding(16.dp)
             )
-        },
-        onConfirm = {
-            onConfirm()
-        },
-        onDismiss = {
-            onDismiss()
         }
     )
 }

@@ -37,15 +37,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.sopt.at.R
-import org.sopt.at.models.LoginFieldType
+import org.sopt.at.views.signin.LoginFieldType
 import org.sopt.at.ui.theme.ButtonGrayColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AtSoptTextField(
-    modifier: Modifier = Modifier,
     value: String,
     type: LoginFieldType,
+    modifier: Modifier = Modifier,
     onTextChange: (String) -> Unit,
     onIconClick: () -> Unit,
     focusRequester: FocusRequester = FocusRequester(),
