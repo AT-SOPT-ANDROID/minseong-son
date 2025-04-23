@@ -1,6 +1,5 @@
 package org.sopt.at.views.main
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -10,13 +9,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.sopt.at.viewmodels.HistoryViewModel
-import org.sopt.at.viewmodels.HomeViewModel
 import org.sopt.at.viewmodels.SignInViewModel
 import org.sopt.at.views.history.HistoryScreen
 import org.sopt.at.views.home.HomeScreen
 import org.sopt.at.views.live.LiveScreen
 import org.sopt.at.views.my.ProfileScreen
-import org.sopt.at.views.navigation.Route
+import org.sopt.at.views.navigation.Screen
 import org.sopt.at.views.search.SearchScreen
 import org.sopt.at.views.shorts.ShortsScreen
 import org.sopt.at.views.signin.SignInScreen
@@ -27,17 +25,16 @@ fun NavigationGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     signInViewModel: SignInViewModel = hiltViewModel(),
-    viewModel: HomeViewModel = hiltViewModel(),
     historyViewModel: HistoryViewModel = hiltViewModel(),
 ) {
     val isLoggedIn by signInViewModel.isLoggedIn.collectAsState()
 
     NavHost(
         navController = navController,
-        startDestination = if (isLoggedIn == true) Route.HOME else Route.SIGN_IN
+        startDestination = if (isLoggedIn == true) Screen.Home.route else Screen.SignIn.route
     ) {
         //로그인
-        composable(Route.SIGN_IN) {
+        composable(Screen.SignIn.route) {
             SignInScreen(
                 navController = navController,
                 modifier = modifier
@@ -45,7 +42,7 @@ fun NavigationGraph(
         }
 
         //회원가입
-        composable(Route.SIGN_UP) {
+        composable(Screen.SignUp.route) {
             SignUpScreen(
                 navController = navController,
                 modifier = modifier
@@ -53,7 +50,7 @@ fun NavigationGraph(
         }
 
         //navigation 용
-        composable(Route.HOME) {
+        composable(Screen.Home.route) {
             HomeScreen(
                 navController = navController,
                 modifier = modifier,
@@ -61,25 +58,25 @@ fun NavigationGraph(
             )
         }
 
-        composable(Route.SHORTS) {
+        composable(Screen.Shorts.route) {
             ShortsScreen(
                 modifier = modifier
             )
         }
 
-        composable(Route.LIVE) {
+        composable(Screen.Live.route) {
             LiveScreen(
                 modifier = modifier
             )
         }
 
-        composable(Route.SEARCH) {
+        composable(Screen.Search.route) {
             SearchScreen(
                 modifier = modifier
             )
         }
 
-        composable(Route.HISTORY) {
+        composable(Screen.History.route) {
             HistoryScreen(
                 navController = navController,
                 modifier = modifier,
@@ -87,7 +84,7 @@ fun NavigationGraph(
             )
         }
 
-        composable(Route.PROFILE) {
+        composable(Screen.Profile.route) {
             ProfileScreen(
                 navController = navController,
                 modifier = modifier
