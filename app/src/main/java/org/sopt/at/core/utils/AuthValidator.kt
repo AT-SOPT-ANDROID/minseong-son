@@ -5,11 +5,15 @@ import org.sopt.at.R
 import org.sopt.at.core.common.CommonConstants
 
 object AuthValidator {
+    //패턴을 미리 만들어놓기
+    private val idRegex = "^[a-z][a-z0-9]*$".toRegex()
+    private val passwordRegex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[~!@#\$%^&*]).{8,15}$".toRegex()
+
     fun validateId(id: String): ValidationResult {
         Log.e("validateId", "validateId: $id")
         return when {
             id.length !in 6..12 -> ValidationResult(false, R.string.msg_validation_wrong_email_length.toString())
-            !id.matches("^[a-z][a-z0-9]*$".toRegex()) -> ValidationResult(false, R.string.msg_validation_wrong_email.toString())
+            !id.matches(idRegex) -> ValidationResult(false, R.string.msg_validation_wrong_email.toString())
             else -> ValidationResult(true)
         }
     }
@@ -17,8 +21,7 @@ object AuthValidator {
     fun validatePassword(pw: String): ValidationResult {
         return when {
             pw.length !in 8..15 -> ValidationResult(false, R.string.msg_validation_wrong_password_length.toString())
-            !pw.matches("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[~!@#\$%^&*]).{8,15}$".toRegex()) ->
-                ValidationResult(false, R.string.msg_validation_wrong_password.toString())
+            !pw.matches(passwordRegex) -> ValidationResult(false, R.string.msg_validation_wrong_password.toString())
             else -> ValidationResult(true)
         }
     }
