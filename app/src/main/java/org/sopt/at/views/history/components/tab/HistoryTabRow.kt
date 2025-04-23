@@ -1,4 +1,4 @@
-package org.sopt.at.views.history.tab
+package org.sopt.at.views.history.components.tab
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState

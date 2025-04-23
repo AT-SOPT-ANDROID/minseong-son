@@ -16,7 +16,7 @@ import org.sopt.at.models.home.HomeBannerEntity
 import org.sopt.at.models.home.HomeTabEntity
 import org.sopt.at.models.home.HomeTopAndCurrentEntity
 import org.sopt.at.repository.home.HomeDataRepository
-import org.sopt.at.views.navigation.Route
+import org.sopt.at.views.navigation.Screen
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +26,7 @@ class HomeViewModel @Inject constructor(
     private val _homeTab = MutableStateFlow(HomeTabEntity(tab = CommonConstants.EMPTY_STRING))
     val homeTab = _homeTab.asStateFlow()
 
-    private val _route = MutableStateFlow(Route.HOME)
+    private val _route = MutableStateFlow(Screen.Home.route)
     val route = _route.asStateFlow()
 
     fun fetchHomeTab(tab : HomeTabEntity) {

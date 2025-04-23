@@ -43,7 +43,7 @@ import org.sopt.at.core.common.CommonConstants
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.utils.PreferenceDataStore
 import org.sopt.at.viewmodels.SignInViewModel
-import org.sopt.at.views.navigation.Route
+import org.sopt.at.views.navigation.Screen
 import org.sopt.at.views.signin.LoginResult
 import org.sopt.at.views.signin.SignInEvent
 
@@ -60,7 +60,7 @@ fun ProfileScreen(
 
     LaunchedEffect(loginState.loginResult) {
         if (loginState.loginResult == LoginResult.LogOut) {
-            navController.navigate(Route.SIGN_IN) {
+            navController.navigate(Screen.SignIn.route) {
                 popUpTo(0)
                 launchSingleTop = true
             }

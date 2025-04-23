@@ -30,13 +30,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.at.R
 import org.sopt.at.components.dialogs.DialogType
 import org.sopt.at.components.dialogs.ExitDialog
-import org.sopt.at.views.history.tab.HistoryTabData
+import org.sopt.at.views.history.components.tab.HistoryTabData
 import org.sopt.at.components.topappbar.BackOnlyTopAppBar
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.viewmodels.HistoryViewModel
-import org.sopt.at.viewmodels.HomeViewModel
 import org.sopt.at.viewmodels.MainViewModel
-import org.sopt.at.views.navigation.Route
+import org.sopt.at.views.navigation.Screen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -63,7 +62,6 @@ fun MainContent(
     modifier: Modifier = Modifier,
     viewModel : MainViewModel = hiltViewModel(),
     historyViewModel: HistoryViewModel = hiltViewModel(),
-    homeViewModel : HomeViewModel = hiltViewModel(),
     onConfirm : () -> Unit = {},
 ) {
     val navController = rememberNavController()
@@ -82,8 +80,8 @@ fun MainContent(
     Scaffold(
         bottomBar = {
             if (currentRoute !in listOf(
-                Route.SIGN_IN,
-                Route.SIGN_UP
+                Screen.SignUp.route,
+                Screen.SignIn.route
                 )
             ) {
                 MainBottomNavigation(
@@ -95,8 +93,8 @@ fun MainContent(
 
         topBar = {
             if (currentRoute in listOf(
-                    Route.SIGN_IN,
-                    Route.SIGN_UP
+                    Screen.SignUp.route,
+                    Screen.SignIn.route
                 )
             ) {
                 BackOnlyTopAppBar(
@@ -108,7 +106,7 @@ fun MainContent(
 
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
-            if (currentRoute == Route.HISTORY && historyTab == HistoryTabData.TAB_SERIES) {
+            if (currentRoute == Screen.History.route && historyTab == HistoryTabData.TAB_SERIES) {
                 FloatingActionButton(
                     onClick = {
                         historyViewModel.openHistoryDialog(DialogType.DIALOG_TYPE_CREATE)
@@ -130,7 +128,6 @@ fun MainContent(
                 navController = navController,
                 modifier = Modifier,
                 historyViewModel = historyViewModel,
-                viewModel = homeViewModel
             )
         }
 

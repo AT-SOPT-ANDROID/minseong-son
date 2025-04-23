@@ -1,17 +1,10 @@
 package org.sopt.at.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
-import org.sopt.at.views.history.tab.HistoryTabData
+import org.sopt.at.views.history.components.tab.HistoryTabData
 import org.sopt.at.core.common.CommonConstants
 import org.sopt.at.models.history.HistoryEmptyEntity
 import org.sopt.at.models.history.HistoryEntity

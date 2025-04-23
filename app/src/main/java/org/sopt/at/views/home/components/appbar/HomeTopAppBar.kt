@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import org.sopt.at.R
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
-import org.sopt.at.views.navigation.Route
+import org.sopt.at.views.navigation.Screen
 
 @Composable
 fun HomeTopAppBar(
@@ -41,7 +41,7 @@ fun HomeTopAppBar(
         )
 
         IconButton(onClick = {
-            navController.navigate(Route.PROFILE) {
+            navController.navigate(Screen.Profile.route) {
                 launchSingleTop = true
             }
         }) {

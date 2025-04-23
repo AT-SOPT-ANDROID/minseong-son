@@ -1,6 +1,5 @@
 package org.sopt.at.views.signup
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -39,11 +38,11 @@ import androidx.navigation.compose.rememberNavController
 import org.sopt.at.R
 import org.sopt.at.components.inputs.AtSoptTextField
 import org.sopt.at.core.common.CommonConstants
-import org.sopt.at.models.LoginFieldType
+import org.sopt.at.views.signin.LoginFieldType
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.utils.PreferenceDataStore
 import org.sopt.at.viewmodels.SignUpViewModel
-import org.sopt.at.views.navigation.Route
+import org.sopt.at.views.navigation.Screen
 import org.sopt.at.views.signin.SignInScreen
 
 @Composable
@@ -71,8 +70,8 @@ fun SignUpScreen(
             PreferenceDataStore.setEmail(context, signUpState.entity.email)
             PreferenceDataStore.setPassword(context, signUpState.entity.password)
 
-            navController.navigate(Route.SIGN_IN) {
-                popUpTo(Route.SIGN_UP) {
+            navController.navigate(Screen.SignIn.route) {
+                popUpTo(Screen.SignUp.route) {
                     inclusive = true
                 }
             }

@@ -28,7 +28,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,11 +52,9 @@ import org.sopt.at.R
 import org.sopt.at.components.inputs.AtSoptTextField
 import org.sopt.at.core.common.CommonConstants
 import org.sopt.at.extensions.noRippleClickable
-import org.sopt.at.models.LoginFieldType
 import org.sopt.at.ui.theme.ButtonGrayColor
 import org.sopt.at.viewmodels.SignInViewModel
-import org.sopt.at.views.navigation.BottomNavItem
-import org.sopt.at.views.navigation.Route
+import org.sopt.at.views.navigation.Screen
 
 @Composable
 fun SignInScreen(
@@ -95,8 +92,8 @@ fun SignInScreen(
     LaunchedEffect(uiState.loginResult) {
         when (uiState.loginResult) {
             LoginResult.Success -> {
-                navController.navigate(Route.HOME) {
-                    popUpTo(Route.SIGN_IN) { // 뒤로가기 방지 로그인 루트 까지 삭제 - 자기포함
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.SignIn.route) { // 뒤로가기 방지 로그인 루트 까지 삭제 - 자기포함
                         inclusive = true
                     }
                     launchSingleTop = true
@@ -200,7 +197,7 @@ fun SignInScreen(
             AccountSupport(
                 onSignUpClick = {
                     //signInViewModel.onEvent(SignInEvent.SubmitClicked)
-                    navController.navigate(Route.SIGN_UP) {
+                    navController.navigate(Screen.SignUp.route) {
                         launchSingleTop = true
                     }
                 }

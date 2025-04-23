@@ -7,7 +7,7 @@ import org.sopt.at.models.home.HomeTabEntity
 import org.sopt.at.models.home.HomeTopAndCurrentEntity
 import org.sopt.at.views.home.common.HomeItemTypeDescription
 import org.sopt.at.views.home.common.HomeTabData
-import org.sopt.at.views.navigation.Route
+import org.sopt.at.views.navigation.Screen
 import javax.inject.Inject
 
 class HomeDataRepository @Inject constructor(): HomeRepository {
@@ -114,7 +114,7 @@ class HomeDataRepository @Inject constructor(): HomeRepository {
 
     override fun getTabList(route: String): List<HomeTabEntity> {
         return when (route) {
-            Route.HOME -> {
+            Screen.Home.route -> {
                 homeTabSampleList
             }
 

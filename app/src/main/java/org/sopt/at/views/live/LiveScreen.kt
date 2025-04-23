@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import org.sopt.at.views.navigation.Route
+import org.sopt.at.views.navigation.Screen
 
 @Composable
 fun LiveScreen(
@@ -19,7 +19,7 @@ fun LiveScreen(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = Route.LIVE,
+            text = Screen.Live.route,
             fontWeight = FontWeight.Bold
         )
     }

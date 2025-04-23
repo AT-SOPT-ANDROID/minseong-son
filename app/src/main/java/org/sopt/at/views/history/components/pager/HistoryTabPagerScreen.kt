@@ -1,11 +1,10 @@
-package org.sopt.at.views.history.pager
+package org.sopt.at.views.history.components.pager
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,11 +28,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import org.sopt.at.R
 import org.sopt.at.components.dialogs.DialogType
-import org.sopt.at.views.history.tab.HistoryTabData
+import org.sopt.at.views.history.components.tab.HistoryTabData
 import org.sopt.at.models.history.HistoryEmptyEntity
 import org.sopt.at.viewmodels.HistoryViewModel
-import org.sopt.at.views.history.HistoryLazyGrid
-import org.sopt.at.views.navigation.Route
+import org.sopt.at.views.history.components.itemgrid.HistoryLazyGrid
+import org.sopt.at.views.navigation.Screen
 
 @Composable
 fun HistoryTabPagerScreen(
@@ -83,8 +82,8 @@ fun HistoryTabPagerScreen(
                     .clip(RoundedCornerShape(8.dp))
                     .align(Alignment.Start)
                     .clickable {
-                        navController.navigate(Route.HOME) {
-                            popUpTo(Route.HISTORY) {
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.History.route) {
                                 inclusive = true
                             }
                             launchSingleTop = true
