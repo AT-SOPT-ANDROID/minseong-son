@@ -1,7 +1,6 @@
 package org.sopt.at.viewmodels
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -67,7 +66,7 @@ class SignUpViewModel @Inject constructor(
             }
 
             _toastMessage.update {
-                context.getString(isEmailValid.message.toInt())
+                context.getString(isEmailValid.message)
             }
 
             return
@@ -95,7 +94,7 @@ class SignUpViewModel @Inject constructor(
             }
 
             _toastMessage.update {
-                context.getString(isPasswordValid.message.toInt())
+                context.getString(isPasswordValid.message)
             }
 
             return

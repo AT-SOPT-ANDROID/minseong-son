@@ -1,8 +1,8 @@
 package org.sopt.at.core.utils
 
 import android.util.Log
+import androidx.annotation.StringRes
 import org.sopt.at.R
-import org.sopt.at.core.common.CommonConstants
 
 object AuthValidator {
     //패턴을 미리 만들어놓기
@@ -12,19 +12,22 @@ object AuthValidator {
     fun validateId(id: String): ValidationResult {
         Log.e("validateId", "validateId: $id")
         return when {
-            id.length !in 6..12 -> ValidationResult(false, R.string.msg_validation_wrong_email_length.toString())
-            !id.matches(idRegex) -> ValidationResult(false, R.string.msg_validation_wrong_email.toString())
+            id.length !in 6..12 -> ValidationResult(false, R.string.msg_validation_wrong_email_length)
+            !id.matches(idRegex) -> ValidationResult(false, R.string.msg_validation_wrong_email)
             else -> ValidationResult(true)
         }
     }
 
     fun validatePassword(pw: String): ValidationResult {
         return when {
-            pw.length !in 8..15 -> ValidationResult(false, R.string.msg_validation_wrong_password_length.toString())
-            !pw.matches(passwordRegex) -> ValidationResult(false, R.string.msg_validation_wrong_password.toString())
+            pw.length !in 8..15 -> ValidationResult(false, R.string.msg_validation_wrong_password_length)
+            !pw.matches(passwordRegex) -> ValidationResult(false, R.string.msg_validation_wrong_password)
             else -> ValidationResult(true)
         }
     }
 
-    data class ValidationResult(val isValid: Boolean, val message: String = CommonConstants.EMPTY_STRING)
+    data class ValidationResult(
+        val isValid: Boolean,
+        @StringRes val message: Int = R.string.empty_string
+    )
 }

@@ -9,6 +9,8 @@
     <string name="history">HISTORY</string>
     <string name="profile">PROFILE</string>
 
+    <string name="empty_string" />
+
     <!--app name-->
     <string name="app_name_tving">TVING</string>
     <string name="app_name_login">TVING ID 로그인</string>
