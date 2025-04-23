@@ -1,6 +1,5 @@
 package org.sopt.at.views.history
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,9 +22,9 @@ import org.sopt.at.components.dialogs.DeleteDialog
 import org.sopt.at.components.dialogs.DialogType
 import org.sopt.at.core.common.CommonConstants
 import org.sopt.at.viewmodels.HistoryViewModel
-import org.sopt.at.views.history.dialog.HistoryAddDialog
-import org.sopt.at.views.history.pager.HistoryTabPagerScreen
-import org.sopt.at.views.history.tab.HistoryTabRow
+import org.sopt.at.views.history.components.dialog.HistoryAddDialog
+import org.sopt.at.views.history.components.pager.HistoryTabPagerScreen
+import org.sopt.at.views.history.components.tab.HistoryTabRow
 
 @Composable
 fun HistoryScreen(

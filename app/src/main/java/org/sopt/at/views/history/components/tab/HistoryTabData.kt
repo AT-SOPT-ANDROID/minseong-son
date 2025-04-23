@@ -1,4 +1,4 @@
-package org.sopt.at.views.history.tab
+package org.sopt.at.views.history.components.tab
 
 object HistoryTabData {
     const val TAB_VIEW = "시청내역"

@@ -1,4 +1,4 @@
-package org.sopt.at.views.history
+package org.sopt.at.views.history.components.itemgrid
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize

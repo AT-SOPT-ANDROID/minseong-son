@@ -1,4 +1,4 @@
-package org.sopt.at.views.history.dialog
+package org.sopt.at.views.history.components.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
