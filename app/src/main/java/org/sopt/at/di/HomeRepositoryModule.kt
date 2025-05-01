@@ -1,5 +1,6 @@
 package org.sopt.at.di
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,9 +11,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object HomeRepositoryModule {
+abstract class HomeRepositoryModule {
 
-    @Provides
+    @Binds //간단히 인터페이스 구현체 주입이니 binds, retrofit2 같이 복잡해지면 provides
     @Singleton
-    fun provideHomeRepository(): HomeRepository = HomeDataRepository()
+    abstract fun bindHomeRepository(
+        homeDataRepository: HomeDataRepository
+    ): HomeRepository
 }
