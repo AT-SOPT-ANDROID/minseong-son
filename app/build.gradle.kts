@@ -45,15 +45,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":designsystem"))
-
     implementation(libs.androidx.datastore.preferences)
 
-    implementation(libs.hilt.navigation.compose)
-    implementation(libs.hilt.android.v252)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("com.google.dagger:hilt-android:2.52")
     implementation(libs.androidx.runtime.livedata)
-    implementation(project(":designsystem"))
-    kapt(libs.hilt.compiler.v252)
+    kapt("com.google.dagger:hilt-compiler:2.52")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
