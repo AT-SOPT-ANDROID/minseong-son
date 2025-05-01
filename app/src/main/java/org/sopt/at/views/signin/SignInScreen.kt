@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -34,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -52,9 +50,9 @@ import org.sopt.at.R
 import org.sopt.at.components.inputs.AtSoptTextField
 import org.sopt.at.core.common.CommonConstants
 import org.sopt.at.extensions.noRippleClickable
-import org.sopt.at.ui.theme.ButtonGrayColor
 import org.sopt.at.viewmodels.SignInViewModel
 import org.sopt.at.views.navigation.Screen
+import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @Composable
 fun SignInScreen(
@@ -63,7 +61,7 @@ fun SignInScreen(
     signInViewModel: SignInViewModel = hiltViewModel()
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val context = LocalContext.current
+
     val snackBarHostState = remember { SnackbarHostState() }
     val emailFocusRequester = remember { FocusRequester() }
     val pwFocusRequester = remember { FocusRequester() }
@@ -76,20 +74,31 @@ fun SignInScreen(
         }
     }
 
-    var snackbarMassage by remember {
-        mutableStateOf(CommonConstants.EMPTY_STRING)
+    //람다함수를 따로 관리
+    val onSignUpClick = remember(navController) {
+        {
+            navController.navigate(Screen.SignUp.route) {
+                launchSingleTop = true
+            }
+        }
     }
 
-    LaunchedEffect(snackbarMassage) {
+    val onSubmitClick = remember(signInViewModel) {
+        {
+            Log.e("TAG", "SignInScreen: SignIn")
+            signInViewModel.onEvent(SignInEvent.SubmitClicked)
+        }
+    }
+    /*LaunchedEffect(snackbarMassage) {
         if (snackbarMassage.isNotEmpty() && snackbarMassage.isNotBlank()) {
             snackBarHostState.showSnackbar(
                 message = snackbarMassage
             )
             snackbarMassage = CommonConstants.EMPTY_STRING
         }
-    }
+    }*/
 
-    LaunchedEffect(uiState.loginResult) {
+    /*LaunchedEffect(uiState.loginResult) {
         when (uiState.loginResult) {
             LoginResult.Success -> {
                 navController.navigate(Screen.Home.route) {
@@ -119,6 +128,24 @@ fun SignInScreen(
             null -> {
             }
         }
+    }*/
+    //side effect 따로 관리
+    LaunchedEffect(Unit) {
+        signInViewModel.eventFlow.collect { event ->
+            when (event) {
+                is UiEvent.ShowSnackbar -> {
+                    snackBarHostState.showSnackbar(message = event.message)
+                }
+                is UiEvent.Navigate -> {
+                    navController.navigate(event.route) {
+                        popUpTo(Screen.SignIn.route) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
+            }
+        }
     }
 
 
@@ -128,6 +155,7 @@ fun SignInScreen(
     ) { innerPadding ->
         Column(
             modifier = modifier
+                .background(MyAtSoptTheme.colors.white)
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
@@ -135,6 +163,7 @@ fun SignInScreen(
 
             Text(
                 text = stringResource(R.string.app_name_login),
+                color = MyAtSoptTheme.colors.black,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 modifier = modifier.padding(horizontal = 10.dp)
@@ -176,31 +205,24 @@ fun SignInScreen(
                     .padding(horizontal = 16.dp, vertical = 12.dp)
                     .clip(RectangleShape)
                     .background(
-                        if (isEnabled) Color.Red else ButtonGrayColor
+                        if (isEnabled) MyAtSoptTheme.colors.brand else MyAtSoptTheme.colors.buttonGray
                     )
                     .clickable(
                         enabled = isEnabled,
                         interactionSource = interactionSource,
-                        indication = null
-                    ) {
-                        Log.e("TAG", "SignInScreen: SignIn")
-                        signInViewModel.onEvent(SignInEvent.SubmitClicked)
-                    }
+                        indication = null,
+                        onClick = onSubmitClick
+                    )
                     .padding(vertical = 12.dp),
-                color = Color.White,
+                color = MyAtSoptTheme.colors.white,
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyLarge
+                style = MyAtSoptTheme.typography.button
             )
 
             Spacer(modifier = modifier.height(16.dp))
 
             AccountSupport(
-                onSignUpClick = {
-                    //signInViewModel.onEvent(SignInEvent.SubmitClicked)
-                    navController.navigate(Screen.SignUp.route) {
-                        launchSingleTop = true
-                    }
-                }
+                onSignUpClick = onSignUpClick
             )
 
             Spacer(modifier = modifier.height(24.dp))
@@ -223,7 +245,7 @@ fun SignInScreen(
                     append("이 적용됩니다.")
                 },
                 fontSize = 14.sp,
-                color = Color.Gray,
+                color = MyAtSoptTheme.colors.gray3,
                 modifier = modifier.align(Alignment.CenterHorizontally).alpha(0.5f),
                 textAlign = TextAlign.Center
             )
@@ -245,7 +267,7 @@ fun AccountSupport(
         Text(
             text = stringResource(R.string.btn_find_id),
             fontSize = 14.sp,
-            color = Color.Gray
+            color = MyAtSoptTheme.colors.gray3
         )
 
         VerticalDivider(modifier = modifier.height(16.dp))
@@ -253,7 +275,7 @@ fun AccountSupport(
         Text(
             text = stringResource(R.string.btn_find_password),
             fontSize = 14.sp,
-            color = Color.Gray
+            color = MyAtSoptTheme.colors.gray3
         )
 
         VerticalDivider(modifier = modifier.height(16.dp))
@@ -261,7 +283,7 @@ fun AccountSupport(
         Text(
             text = stringResource(R.string.btn_sign_up),
             fontSize = 14.sp,
-            color = Color.Gray,
+            color = MyAtSoptTheme.colors.gray3,
             modifier = modifier.noRippleClickable(
                 onClick = {
                     onSignUpClick()

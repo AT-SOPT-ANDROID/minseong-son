@@ -1,6 +1,8 @@
 package org.sopt.at.views.home.components.tab
 
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -17,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.at.models.home.HomeTabEntity
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
+import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,6 +32,7 @@ fun HomeTabRow(
     val currentIndex = pagerState.currentPage
 
     SecondaryTabRow(
+        modifier = modifier,
         selectedTabIndex = currentIndex,
         indicator = {
             TabRowDefaults.SecondaryIndicator(
@@ -45,7 +49,7 @@ fun HomeTabRow(
             ) {
                 Text(
                     text = value.tab,
-                    color = Color.White,
+                    color = MyAtSoptTheme.colors.black,
                     fontWeight = if (currentIndex == index) {
                         FontWeight.Bold
                     } else {

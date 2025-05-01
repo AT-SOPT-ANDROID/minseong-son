@@ -42,9 +42,9 @@ import org.sopt.at.R
 import org.sopt.at.core.common.CommonConstants
 import org.sopt.at.models.history.HistoryEntity
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
-import org.sopt.at.ui.theme.DialogContainerColor
 import org.sopt.at.viewmodels.HistoryViewModel
 import org.sopt.at.views.home.common.HomeItemTypeDescription
+import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @Composable
 fun HistoryAddDialog(
@@ -72,13 +72,13 @@ fun HistoryAddDialog(
             modifier = modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
-                .background(DialogContainerColor)
+                .background(MyAtSoptTheme.colors.dialogContainer)
         ) {
             Card (
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = DialogContainerColor
+                    containerColor = MyAtSoptTheme.colors.dialogContainer
                 )
             ) {
                 OutlinedTextField(
@@ -95,9 +95,9 @@ fun HistoryAddDialog(
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .background(DialogContainerColor),
+                        .background(MyAtSoptTheme.colors.dialogContainer),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.White
+                        focusedBorderColor = MyAtSoptTheme.colors.white
                     ),
                     label = {
                         Text(
@@ -132,8 +132,8 @@ fun HistoryAddDialog(
                             .weight(1f)
                             .fillMaxHeight(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = DialogContainerColor,
-                            contentColor = Color.LightGray,
+                            containerColor = MyAtSoptTheme.colors.dialogContainer,
+                            contentColor = MyAtSoptTheme.colors.gray2,
                         )
                     ) {
                         Text(
@@ -163,8 +163,8 @@ fun HistoryAddDialog(
                             .weight(1f)
                             .fillMaxHeight(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = DialogContainerColor,
-                            contentColor = Color.LightGray,
+                            containerColor = MyAtSoptTheme.colors.dialogContainer,
+                            contentColor = MyAtSoptTheme.colors.gray2,
                         ),
                     ) {
                         Text(

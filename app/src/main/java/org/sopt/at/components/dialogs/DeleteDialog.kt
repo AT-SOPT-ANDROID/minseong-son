@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import org.sopt.at.R
 import org.sopt.at.models.history.HistoryEntity
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
+import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @Composable
 fun DeleteDialog(
@@ -29,7 +30,7 @@ fun DeleteDialog(
             Text(
                 text = stringResource(R.string.dialog_title_delete),
                 textAlign = TextAlign.Center,
-                color = Color.LightGray,
+                color = MyAtSoptTheme.colors.gray2,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
                 modifier = modifier

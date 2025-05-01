@@ -1,6 +1,7 @@
 package org.sopt.at.views.main
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -27,7 +28,19 @@ fun NavigationGraph(
     signInViewModel: SignInViewModel = hiltViewModel(),
     historyViewModel: HistoryViewModel = hiltViewModel(),
 ) {
-    val isLoggedIn by signInViewModel.isLoggedIn.collectAsState()
+    val isLoggedIn by signInViewModel.isLoggedIn.collectAsState(initial = false)
+
+    LaunchedEffect(isLoggedIn) {
+        if (isLoggedIn == true) {
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.SignIn.route) { inclusive = true }
+            }
+        } else {
+            navController.navigate(Screen.SignIn.route) {
+                popUpTo(Screen.Home.route) { inclusive = true }
+            }
+        }
+    }
 
     NavHost(
         navController = navController,
@@ -53,33 +66,24 @@ fun NavigationGraph(
         composable(Screen.Home.route) {
             HomeScreen(
                 navController = navController,
-                modifier = modifier,
-
             )
         }
 
         composable(Screen.Shorts.route) {
-            ShortsScreen(
-                modifier = modifier
-            )
+            ShortsScreen()
         }
 
         composable(Screen.Live.route) {
-            LiveScreen(
-                modifier = modifier
-            )
+            LiveScreen()
         }
 
         composable(Screen.Search.route) {
-            SearchScreen(
-                modifier = modifier
-            )
+            SearchScreen()
         }
 
         composable(Screen.History.route) {
             HistoryScreen(
                 navController = navController,
-                modifier = modifier,
                 viewModel = historyViewModel,
             )
         }
