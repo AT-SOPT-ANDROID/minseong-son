@@ -87,8 +87,7 @@ class HomeDataRepository @Inject constructor(): HomeRepository {
         )
     )
 
-
-    private val homeTabSampleList = listOf(
+    val homeTabSampleList = listOf(
         HomeTabEntity (
             tab = "드라마"
         ),

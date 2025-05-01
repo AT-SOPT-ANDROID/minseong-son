@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.sopt.at.views.history.components.tab.HistoryTabData
 import org.sopt.at.core.common.CommonConstants
-import org.sopt.at.models.history.DialogState
 import org.sopt.at.models.history.HistoryEmptyEntity
 import org.sopt.at.models.history.HistoryEntity
 import javax.inject.Inject
@@ -45,9 +44,7 @@ class HistoryViewModel @Inject constructor(
     val historyTab = _historyTab.asStateFlow()
 
     fun fetchHistoryTab(tab : String) {
-        if (_historyTab.value != tab) {
-            _historyTab.value = tab
-        }
+        _historyTab.value = tab
     }
 
     private val _historyDataList = MutableStateFlow(emptyList<HistoryEntity>())
@@ -63,17 +60,22 @@ class HistoryViewModel @Inject constructor(
     private val _historyTitle = MutableStateFlow<String?>(null)
     val historyTitle = _historyTitle.asStateFlow()
 
-    private val _historyDialogState = MutableStateFlow(DialogState())
+    private val _historyDialogState = MutableStateFlow(Pair(false, CommonConstants.EMPTY_STRING))
     val historyDialogState = _historyDialogState.asStateFlow()
 
     fun openHistoryDialog(dialogType: String) {
-        _historyDialogState.value = DialogState(true, dialogType)
+        _historyDialogState.value = _historyDialogState.value.copy(
+            first = true,
+            second = dialogType
+        )
     }
 
-    fun closeHistoryDialog() {
-        _historyDialogState.value = DialogState(false, CommonConstants.EMPTY_STRING)
+    fun closeHistoryDialog(dialogType: String) {
+        _historyDialogState.value = _historyDialogState.value.copy(
+            first = false,
+            second = dialogType
+        )
     }
-
 
     fun setHistoryTitle(title: String?) {
         _historyTitle.value = title
