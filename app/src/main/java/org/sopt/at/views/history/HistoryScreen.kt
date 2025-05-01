@@ -1,6 +1,5 @@
 package org.sopt.at.views.history
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +25,6 @@ import org.sopt.at.viewmodels.HistoryViewModel
 import org.sopt.at.views.history.components.dialog.HistoryAddDialog
 import org.sopt.at.views.history.components.pager.HistoryTabPagerScreen
 import org.sopt.at.views.history.components.tab.HistoryTabRow
-import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @Composable
 fun HistoryScreen(
@@ -65,7 +63,6 @@ fun HistoryScreen(
     Column (
         modifier = modifier
             .fillMaxSize()
-            .background(MyAtSoptTheme.colors.white)
             .padding(16.dp)
     ) {
         HistoryTabRow(
@@ -77,9 +74,7 @@ fun HistoryScreen(
                     viewModel.fetchHistoryTab(tabDataKeyList[index])
                 }
             },
-            modifier = modifier
-                .fillMaxWidth()
-                .background(MyAtSoptTheme.colors.white),
+            modifier = modifier,
         )
 
         HorizontalPager(
@@ -97,28 +92,28 @@ fun HistoryScreen(
         }
     }
 
-    if (historyDialogState.isVisible && historyDialogState.type == DialogType.DIALOG_TYPE_CREATE) {
+    if (historyDialogState.first && historyDialogState.second == DialogType.DIALOG_TYPE_CREATE) {
         HistoryAddDialog(
             onConfirm = { item ->
                 viewModel.addHistoryData(item)
-                viewModel.closeHistoryDialog()
+                viewModel.closeHistoryDialog(CommonConstants.EMPTY_STRING)
             },
             onDismiss = {
-                viewModel.closeHistoryDialog()
+                viewModel.closeHistoryDialog(CommonConstants.EMPTY_STRING)
             }
         )
     }
 
-    if (historyDialogState.isVisible && historyDialogState.type == DialogType.DIALOG_TYPE_DELETE) {
+    if (historyDialogState.first && historyDialogState.second == DialogType.DIALOG_TYPE_DELETE) {
         if (historyDeleteData != null) {
             DeleteDialog (
                 item = historyDeleteData!!,
                 onConfirm = { item ->
                     viewModel.deleteHistoryData(item)
-                    viewModel.closeHistoryDialog()
+                    viewModel.closeHistoryDialog(CommonConstants.EMPTY_STRING)
                 },
                 onDismiss = {
-                    viewModel.closeHistoryDialog()
+                    viewModel.closeHistoryDialog(CommonConstants.EMPTY_STRING)
                 }
             )
         }

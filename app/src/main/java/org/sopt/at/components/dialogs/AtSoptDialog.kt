@@ -30,7 +30,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import org.sopt.at.R
 import org.sopt.at.models.history.HistoryEntity
-import org.sopt.designsystem.theme.MyAtSoptTheme
+import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
+import org.sopt.at.ui.theme.DialogContainerColor
 
 @Composable
 fun AtSoptDialog(
@@ -50,14 +51,14 @@ fun AtSoptDialog(
         Card(
             shape = RoundedCornerShape(8.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MyAtSoptTheme.colors.dialogContainer
+                containerColor = DialogContainerColor
             )
         ) {
             Column(
                 modifier = modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .background(MyAtSoptTheme.colors.black)
+                    .background(Color.Black)
                     .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -75,8 +76,8 @@ fun AtSoptDialog(
                             .weight(1f)
                             .fillMaxHeight(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MyAtSoptTheme.colors.black,
-                            contentColor = MyAtSoptTheme.colors.gray2,
+                            containerColor = Color.Black,
+                            contentColor = Color.LightGray,
                         )
                     ) {
                         Text(
@@ -93,7 +94,7 @@ fun AtSoptDialog(
                         modifier = modifier
                             .fillMaxHeight()
                             .padding(vertical = 16.dp)
-                            .background(color = MyAtSoptTheme.colors.gray2)
+                            .background(color = Color.LightGray)
                     )
 
                     Button(
@@ -105,8 +106,8 @@ fun AtSoptDialog(
                             .weight(1f)
                             .fillMaxHeight(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MyAtSoptTheme.colors.black,
-                            contentColor = MyAtSoptTheme.colors.gray2,
+                            containerColor = Color.Black,
+                            contentColor = Color.LightGray,
                         ),
                     ) {
                         Text(
@@ -125,7 +126,7 @@ fun AtSoptDialog(
 @Preview(showBackground = true)
 @Composable
 fun AtSoptDialogPreview() {
-    org.sopt.designsystem.theme.AtSpotANDROIDTheme {
+    ATSOPTANDROIDTheme {
         AtSoptDialog (
             item = null,
             modifier = Modifier,
@@ -137,7 +138,7 @@ fun AtSoptDialogPreview() {
                 Text(
                     text = stringResource(R.string.dialog_title_delete),
                     textAlign = TextAlign.Center,
-                    color = MyAtSoptTheme.colors.gray2,
+                    color = Color.LightGray,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
                     modifier = Modifier

@@ -1,18 +1,18 @@
 package org.sopt.at.views.home
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import org.sopt.at.R
+import org.sopt.at.core.common.CommonConstants
 import org.sopt.at.models.home.HomeTabEntity
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.viewmodels.HomeViewModel
@@ -32,8 +33,8 @@ import org.sopt.at.views.home.components.banner.HomeBannerLazyRow
 import org.sopt.at.views.home.components.currentcontents.HomeCurrentContentsLazyRow
 import org.sopt.at.views.home.components.tab.HomeTabRow
 import org.sopt.at.views.home.components.toptwenty.HomeTopTwentyLazyRow
-import org.sopt.designsystem.theme.MyAtSoptTheme
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -43,16 +44,12 @@ fun HomeScreen(
     val listState = rememberLazyListState()
 
     val homeBannerDataList by homeViewModel.homeBannerDataList.collectAsState()
-
-    //그냥 선언된 거 가져올 때 remember에 넣어서 불필요한 리컴포지션 방지
-    val homeTopTwentyDataList = remember { homeViewModel.getHomeTopTwentyItemList() }
-    val homeCurrentContentsDataList = remember { homeViewModel.getHomeCurrentContentsItemList() }
-
+    val homeTopTwentyDataList = homeViewModel.getHomeTopTwentyItemList()
+    val homeCurrentContentsDataList = homeViewModel.getHomeCurrentContentsItemList()
     val homeTab by homeViewModel.homeTab.collectAsState()
-    val tabDataList by homeViewModel.tabDataList.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
-
+    val tabDataList by homeViewModel.tabDataList.collectAsState()
 
     val pagerState = rememberPagerState(
         pageCount = { tabDataList.size },
@@ -60,19 +57,9 @@ fun HomeScreen(
         initialPage = 0,
     )
 
-    //remember로 래핑하여 HomeTabRow가 재구성되더라도 onTabSelected는 메모이즈된 동일 참조를 유지
-    val onTabSelected: (Int, HomeTabEntity) -> Unit = remember(homeViewModel, pagerState) {
-        { index, value ->
-            coroutineScope.launch {
-                homeViewModel.fetchHomeTab(value)
-                pagerState.animateScrollToPage(index)
-            }
-        }
-    }
-
-    /*LaunchedEffect(Unit) {
+    LaunchedEffect(Unit) {
         homeViewModel.fetchHomeTab(HomeTabEntity(tab = CommonConstants.EMPTY_STRING))
-    }*/
+    }
 
     LaunchedEffect(homeTab) {
         listState.animateScrollToItem(0)
@@ -80,30 +67,35 @@ fun HomeScreen(
 
     LazyColumn (
         modifier = modifier
-            .background(MyAtSoptTheme.colors.white)
+            .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         state = listState
     ) {
         item {
             HomeTopAppBar(
+                modifier = Modifier,
                 navController = navController
             )
         }
 
         stickyHeader {
             HomeTabRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MyAtSoptTheme.colors.white),
+                modifier = modifier,
                 tabDataList = tabDataList,
                 pagerState = pagerState,
-                onTabSelected = onTabSelected
+                onTabSelected = { index, value ->
+                    coroutineScope.launch {
+                        homeViewModel.fetchHomeTab(value)
+                        pagerState.animateScrollToPage(index)
+                    }
+                },
             )
         }
 
         item {
             HomeBannerLazyRow(
+                modifier = modifier,
                 homeBannerDataList = homeBannerDataList
             )
         }
@@ -111,11 +103,13 @@ fun HomeScreen(
         item {
             Text(
                 text = stringResource(R.string.text_home_top_20),
-                color = MyAtSoptTheme.colors.black,
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = modifier,
                 fontSize = 24.sp
             )
 
             HomeTopTwentyLazyRow(
+                modifier = modifier,
                 homeTopTwentyDataList = homeTopTwentyDataList
             )
         }
@@ -123,13 +117,14 @@ fun HomeScreen(
         item {
             Text(
                 text = stringResource(R.string.text_home_current_contents),
-                color = MyAtSoptTheme.colors.black,
-                modifier = Modifier
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = modifier
                     .padding(horizontal = 16.dp),
                 fontSize = 24.sp
             )
 
             HomeCurrentContentsLazyRow(
+                modifier = modifier,
                 homeCurrentContentsDataList = homeCurrentContentsDataList
             )
         }
@@ -145,6 +140,7 @@ fun HomePreview() {
     val viewmodel = hiltViewModel<HomeViewModel>()
     ATSOPTANDROIDTheme {
         HomeScreen(
+            modifier = Modifier,
             navController = navController,
             homeViewModel = viewmodel
         )

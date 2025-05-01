@@ -1,13 +1,10 @@
 package org.sopt.at.views.main
 
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,27 +36,17 @@ import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.viewmodels.HistoryViewModel
 import org.sopt.at.viewmodels.MainViewModel
 import org.sopt.at.views.navigation.Screen
-import org.sopt.designsystem.theme.AtSpotANDROIDTheme
-import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AtSpotANDROIDTheme {
-                Surface (
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MyAtSoptTheme.colors.white),
-                    color = MyAtSoptTheme.colors.white
-                ) {
-                    MainContent (
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(MyAtSoptTheme.colors.white)
+            ATSOPTANDROIDTheme {
+                Surface {
+                    MainContent(
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         finish()
                     }
@@ -106,11 +94,11 @@ fun MainContent(
         topBar = {
             if (currentRoute in listOf(
                     Screen.SignUp.route,
-                    Screen.SignIn.route,
-                    Screen.Profile.route
+                    Screen.SignIn.route
                 )
             ) {
                 BackOnlyTopAppBar(
+                    modifier = Modifier,
                     navController = navController
                 )
             }
@@ -124,8 +112,8 @@ fun MainContent(
                         historyViewModel.openHistoryDialog(DialogType.DIALOG_TYPE_CREATE)
                     },
                     modifier = Modifier.padding(end = 10.dp),
-                    containerColor = MyAtSoptTheme.colors.black,
-                    contentColor = MyAtSoptTheme.colors.white
+                    containerColor = Color.Black,
+                    contentColor = Color.White
                 ) {
                     Icon(
                         Icons.Default.Create,

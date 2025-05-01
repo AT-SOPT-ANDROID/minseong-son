@@ -1,7 +1,5 @@
 package org.sopt.at.views.history.components.tab
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -17,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
-import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,12 +27,11 @@ fun HistoryTabRow(
     val currentIndex = pagerState.currentPage
 
     SecondaryTabRow(
-        modifier = modifier,
         selectedTabIndex = currentIndex,
         indicator = {
             TabRowDefaults.SecondaryIndicator(
                 modifier = modifier.tabIndicatorOffset(currentIndex),
-                color = MyAtSoptTheme.colors.black
+                color = Color.White
             )
         },
         divider = {} //빈 컴포저블을 넣어 구분선 제거
@@ -48,7 +44,7 @@ fun HistoryTabRow(
             ) {
                 Text(
                     text = value,
-                    color = MyAtSoptTheme.colors.black,
+                    color = Color.White,
                     fontWeight = if (currentIndex == index) {
                         FontWeight.Bold
                     } else {

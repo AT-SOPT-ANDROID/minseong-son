@@ -2,7 +2,6 @@ package org.sopt.at.views.signup
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +44,6 @@ import org.sopt.at.utils.PreferenceDataStore
 import org.sopt.at.viewmodels.SignUpViewModel
 import org.sopt.at.views.navigation.Screen
 import org.sopt.at.views.signin.SignInScreen
-import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @Composable
 fun SignUpScreen(
@@ -58,32 +57,6 @@ fun SignUpScreen(
     val toastMsg by signUpViewModel.toastMessage.collectAsState()
 
     val interactionSource = remember { MutableInteractionSource() }
-
-    //미리 정리 해놔서 ui가 편하게
-    val currentInputValue = if (!screenType) signUpState.entity.email else signUpState.entity.password
-    val currentFieldType = if (!screenType) LoginFieldType.EMAIL else LoginFieldType.PASSWORD
-    val currentHelperText = stringResource(
-        if (!screenType) R.string.msg_sign_up_email else R.string.msg_sign_up_password
-    )
-    val currentTitleText = stringResource(
-        if (!screenType) R.string.input_signup_email_title else R.string.input_signup_password_title
-    )
-    val buttonText = stringResource(
-        if (!screenType) R.string.btn_next else R.string.btn_complete
-    )
-
-    // 컴포저블 내부에서 매번 새로 생성되는 현상 방지
-    val onSubmitClick = remember(signUpViewModel, screenType) {
-        {
-            signUpViewModel.onEvent(SignUpEvent.SubmitClicked)
-        }
-    }
-
-    val onIconClick = remember(screenType) {
-        {
-            signUpViewModel.onEvent(SignUpEvent.EmailChanged(CommonConstants.EMPTY_STRING))
-        }
-    }
 
     LaunchedEffect(toastMsg) {
         if (!toastMsg.isNullOrEmpty()) {
@@ -108,22 +81,34 @@ fun SignUpScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(MyAtSoptTheme.colors.white)
             .padding(WindowInsets.ime.asPaddingValues()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
         Text(
-            text = currentTitleText,
-            color = MyAtSoptTheme.colors.white,
-            style = MyAtSoptTheme.typography.title
+            text = if (!screenType) {
+                stringResource(R.string.input_signup_email_title)
+            } else {
+                stringResource(R.string.input_signup_password_title)
+            },
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontSize = 24.sp
         )
 
         Spacer(modifier = modifier.height(8.dp))
 
         AtSoptTextField(
-            value = currentInputValue,
-            type = currentFieldType,
+            value = if (!screenType) {
+                signUpState.entity.email
+            } else {
+                signUpState.entity.password
+            },
+            type = if (!screenType) {
+                LoginFieldType.EMAIL
+            } else {
+                LoginFieldType.PASSWORD
+            },
             onTextChange = {
                 if (!screenType) {
                     signUpViewModel.onEvent(SignUpEvent.EmailChanged(it))
@@ -131,12 +116,20 @@ fun SignUpScreen(
                     signUpViewModel.onEvent(SignUpEvent.PasswordChanged(it))
                 }
             },
-            onIconClick = onIconClick
+            onIconClick = {
+                if (!screenType) {
+                    signUpViewModel.onEvent(SignUpEvent.EmailChanged(CommonConstants.EMPTY_STRING))
+                }
+            }
         )
 
         Text(
-            text = currentHelperText,
-            color = MyAtSoptTheme.colors.white,
+            text = if (!screenType) {
+                stringResource(R.string.msg_sign_up_email)
+            } else {
+                stringResource(R.string.msg_sign_up_password)
+            },
+            color = Color.White,
             fontSize = 12.sp,
             modifier = Modifier
                 .alpha(0.5f)
@@ -147,15 +140,15 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = onSubmitClick,/*{
+            onClick = {
                 if (!screenType) {
                     signUpViewModel.onEvent(SignUpEvent.SubmitClicked)
                 } else {
                     signUpViewModel.onEvent(SignUpEvent.SubmitClicked)
                 }
-            },*/
+            },
             shape = RectangleShape,
-            border = BorderStroke(1.dp, MyAtSoptTheme.colors.white),
+            border = BorderStroke(1.dp, Color.White),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent
             ),
@@ -164,11 +157,19 @@ fun SignUpScreen(
                 .padding(16.dp),
             interactionSource = interactionSource
         ) {
-            Text(
-                text = buttonText,
-                fontSize = 14.sp,
-                color = MyAtSoptTheme.colors.white
-            )
+            if (!screenType) {
+                Text(
+                    text = stringResource(R.string.btn_next),
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+            } else {
+                Text(
+                    text = stringResource(R.string.btn_complete),
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+            }
         }
     }
 }

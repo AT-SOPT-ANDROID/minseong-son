@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.sopt.at.R
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
-import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @Composable
 fun ExitDialog(
@@ -34,7 +33,7 @@ fun ExitDialog(
             Text(
                 text = stringResource(R.string.dialog_title_exit),
                 textAlign = TextAlign.Center,
-                color = MyAtSoptTheme.colors.gray2,
+                color = Color.LightGray,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
                 modifier = modifier

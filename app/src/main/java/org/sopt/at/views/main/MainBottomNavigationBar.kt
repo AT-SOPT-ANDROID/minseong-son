@@ -1,10 +1,10 @@
 package org.sopt.at.views.main
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -20,7 +20,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import org.sopt.at.extensions.NoRippleInteractionSource
 import org.sopt.at.views.navigation.BottomNavItems
-import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @Composable
 fun MainBottomNavigation(
@@ -36,13 +35,13 @@ fun MainBottomNavigation(
         modifier = modifier
             .fillMaxWidth()
             .navigationBarsPadding(),
-        containerColor = MyAtSoptTheme.colors.white
+        containerColor = Color.Transparent
     ) {
         items.forEach { item ->
             NavigationBarItem(
-                selected = currentRoute == item.screen.route,
+                selected = currentRoute == item.screenRoute,
                 onClick = {
-                    navController.navigate(item.screen.route) {
+                    navController.navigate(item.screenRoute) {
                         popUpTo(navController.graph.startDestinationId) {
                             //해당 목적지의 상태를 저장
                             saveState = true
@@ -58,24 +57,19 @@ fun MainBottomNavigation(
                         imageVector = ImageVector.vectorResource(item.icon),
                         contentDescription = stringResource(item.title),
                         modifier = modifier.wrapContentSize(),
-                        tint = if(isSystemInDarkTheme()) {
-                            Color.Unspecified
-                        } else {
-                            MyAtSoptTheme.colors.black
-                        }
+                        tint = Color.Unspecified
                     )
                 },
                 label = {
                     Text(
                         text = stringResource(item.title),
-                        style = MyAtSoptTheme.typography.button,
-                        color = MyAtSoptTheme.colors.black
+                        style = MaterialTheme.typography.labelSmall
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MyAtSoptTheme.colors.black,
-                    selectedTextColor = MyAtSoptTheme.colors.black,
-                    unselectedIconColor = MyAtSoptTheme.colors.black,
+                    selectedIconColor = Color.Blue,
+                    selectedTextColor = Color.White,
+                    unselectedIconColor = Color.Gray,
                     indicatorColor = Color.Transparent
                 ),
                 interactionSource = NoRippleInteractionSource,

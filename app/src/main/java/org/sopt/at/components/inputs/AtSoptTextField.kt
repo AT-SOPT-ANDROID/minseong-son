@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.sopt.at.R
 import org.sopt.at.views.signin.LoginFieldType
-import org.sopt.designsystem.theme.MyAtSoptTheme
+import org.sopt.at.ui.theme.ButtonGrayColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,7 +100,7 @@ fun AtSoptTextField(
                         } else {
                             stringResource(R.string.msg_password)
                         },
-                        color = MyAtSoptTheme.colors.gray2.copy(alpha = 0.5f),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         fontSize = 14.sp
                     )
                 },
@@ -112,7 +112,7 @@ fun AtSoptTextField(
                                     Icon(
                                         imageVector = Icons.Default.Close,
                                         contentDescription = stringResource(R.string.btn_clear),
-                                        tint = MyAtSoptTheme.colors.black
+                                        tint = MaterialTheme.colorScheme.onSurface
                                     )
                                 }
                             }
@@ -129,7 +129,7 @@ fun AtSoptTextField(
                                     } else {
                                         stringResource(R.string.password_gone_content_description)
                                     },
-                                    tint = MyAtSoptTheme.colors.black
+                                    tint = Color.LightGray
                                 )
                             }
                         }
@@ -137,9 +137,9 @@ fun AtSoptTextField(
                 },
                 shape = RoundedCornerShape(8.dp),
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = MyAtSoptTheme.colors.buttonGray,
-                    unfocusedContainerColor = MyAtSoptTheme.colors.buttonGray,
-                    focusedIndicatorColor = MyAtSoptTheme.colors.buttonGray,
+                    focusedContainerColor = ButtonGrayColor,
+                    unfocusedContainerColor = ButtonGrayColor,
+                    focusedIndicatorColor = ButtonGrayColor,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
