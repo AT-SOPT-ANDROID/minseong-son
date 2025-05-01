@@ -2,8 +2,6 @@ package org.sopt.at.components.item
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,17 +17,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -41,8 +33,6 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.sopt.at.R
 import org.sopt.at.components.image.StableImage
 import org.sopt.at.models.history.HistoryEntity
@@ -53,16 +43,16 @@ import org.sopt.designsystem.theme.MyAtSoptTheme
 fun AtSoptImageAndTitleComponents(
     drawableResId: Int,
     contentDescription: String,
-    item: HistoryEntity?,
+    item : HistoryEntity?,
     title: String,
     subtitle: String? = null,
-    isNewData: Boolean? = null,
+    isNewData : Boolean? = null,
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
-    widthRatio: Float? = null,
+    widthRatio : Float? = null,
     heightRatio: Float = 0.4f,
     cornerRadius: Dp = 16.dp,
-    onLongClick: (HistoryEntity?) -> Unit? = {}
+    onLongClick : (HistoryEntity?) -> Unit? = {}
 ) {
     //configuration 대신 windowinfo 사용 => compose에서 정한 dp값 대신 실제 기기 크기를 가져옴
     val density = LocalDensity.current
@@ -72,14 +62,6 @@ fun AtSoptImageAndTitleComponents(
     val boxWidth = widthRatio?.let { windowSizeDp.width * it } ?: windowSizeDp.width
     val boxHeight = windowSizeDp.height * heightRatio
 
-    val scope = rememberCoroutineScope()
-    //애니메이션
-    var isClicked by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(
-        targetValue = if (isClicked) 1.05f else 1f,
-        animationSpec = tween(durationMillis = 200)
-    )
-
     Box(
         modifier = modifier
             .animateContentSize()
@@ -87,17 +69,8 @@ fun AtSoptImageAndTitleComponents(
             .height(boxHeight)
             .padding(vertical = 16.dp)
             .clip(RoundedCornerShape(cornerRadius))
-            .graphicsLayer {
-                scaleX = scale
-                scaleY = scale
-            }
             .combinedClickable(
                 onClick = {
-                    isClicked = true
-                    scope.launch {
-                        delay(200)
-                        isClicked = false
-                    }
                 },
                 onLongClick = {
                     onLongClick(item)

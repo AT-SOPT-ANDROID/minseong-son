@@ -1,21 +1,11 @@
 package org.sopt.at.views.history.components.itemgrid
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.EaseOutBack
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,14 +23,6 @@ fun HistoryLazyGrid(
     historyList : List<HistoryEntity>,
     onLongClick : (HistoryEntity?) -> Unit? = {}
 ) {
-    val visibleItems = remember { mutableStateMapOf<Int, Boolean>() }
-
-    LaunchedEffect(historyList) {
-        historyList.forEach {
-            visibleItems[it.id] = true
-        }
-    }
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         modifier = modifier
@@ -49,32 +31,20 @@ fun HistoryLazyGrid(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(historyList, key = { it.title!! }) { item ->
-            AnimatedVisibility(
-                visible = true,
-                enter = scaleIn(
-                    animationSpec = tween(
-                        durationMillis = 500,
-                        easing = EaseOutBack
-                    )
-                ) + fadeIn(),
-                exit = scaleOut(
-                    animationSpec = tween(300)
-                ) + fadeOut()
+            AtSoptImageAndTitleComponents(
+                drawableResId = R.drawable.series_recruit3,
+                contentDescription = stringResource(R.string.home_banner_content_description),
+                item = item,
+                title = item.title ?: CommonConstants.EMPTY_STRING,
+                subtitle = item.type,
+                isNewData = false,
+                modifier = modifier
+                    .animateItem(),
+                horizontalAlignment = Alignment.Start,
+                widthRatio = 0.4f,
+                heightRatio = 0.3f,
             ) {
-                AtSoptImageAndTitleComponents(
-                    drawableResId = R.drawable.series_recruit3,
-                    contentDescription = stringResource(R.string.home_banner_content_description),
-                    item = item,
-                    title = item.title ?: CommonConstants.EMPTY_STRING,
-                    subtitle = item.type,
-                    isNewData = false,
-                    horizontalAlignment = Alignment.Start,
-                    widthRatio = 0.4f,
-                    heightRatio = 0.3f,
-                ) {
-                    visibleItems[item.id] = false
-                    onLongClick(item)
-                }
+                onLongClick(it)
             }
         }
     }

@@ -46,7 +46,6 @@ fun HistoryTabPagerScreen(
     val tab by historyViewModel.historyTab.collectAsState()
     val historyList by historyViewModel.historyDataList.collectAsState(initial = emptyList())
 
-
     if (historyList.isEmpty() || tab != HistoryTabData.TAB_SERIES) {
         Column(
             modifier = modifier
