@@ -1,6 +1,6 @@
 package org.sopt.at.views.my
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import org.sopt.at.R
+import org.sopt.at.components.image.StableImage
 import org.sopt.at.core.common.CommonConstants
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.utils.PreferenceDataStore
@@ -46,6 +47,7 @@ import org.sopt.at.viewmodels.SignInViewModel
 import org.sopt.at.views.navigation.Screen
 import org.sopt.at.views.signin.LoginResult
 import org.sopt.at.views.signin.SignInEvent
+import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @Composable
 fun ProfileScreen(
@@ -68,16 +70,18 @@ fun ProfileScreen(
     }
 
     Column (
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .background(MyAtSoptTheme.colors.white)
     ){
         Row (
             modifier = modifier.fillMaxWidth()
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
-            Image(
-                painter = painterResource(R.drawable.sopt_android),
-                contentDescription = stringResource(R.string.profile_icon_content_description),
+            StableImage(
+                drawableResId = R.drawable.sopt_android,
+                contentDescription = stringResource(R.string.profile_icon_content_description)
             )
 
             Text(
@@ -98,7 +102,7 @@ fun ProfileScreen(
                 modifier = modifier.wrapContentSize()
                     .border(
                         width = 1.dp,
-                        color = Color.White,
+                        color = MyAtSoptTheme.colors.white,
                         shape = RoundedCornerShape(8.dp)
                     ),
             ) {
@@ -115,11 +119,11 @@ fun ProfileScreen(
         Text(
             text = stringResource(R.string.btn_sign_out),
             fontSize = 14.sp,
-            color = Color.White,
+            color = MyAtSoptTheme.colors.white,
             modifier = modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-                .border(1.dp, Color.White, RectangleShape)
+                .border(1.dp, MyAtSoptTheme.colors.white, RectangleShape)
                 .clip(RoundedCornerShape(8.dp))
                 .clickable(
                     interactionSource = interactionSource,

@@ -1,5 +1,6 @@
 package org.sopt.at.views.history.components.pager
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import org.sopt.at.models.history.HistoryEmptyEntity
 import org.sopt.at.viewmodels.HistoryViewModel
 import org.sopt.at.views.history.components.itemgrid.HistoryLazyGrid
 import org.sopt.at.views.navigation.Screen
+import org.sopt.designsystem.theme.MyAtSoptTheme
 
 @Composable
 fun HistoryTabPagerScreen(
@@ -48,18 +50,20 @@ fun HistoryTabPagerScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
+                .background(MyAtSoptTheme.colors.white)
                 .padding(16.dp)
         ) {
             Text(
                 text = emptyData?.title.toString(),
                 fontWeight = FontWeight.Bold,
+                color = MyAtSoptTheme.colors.black,
                 fontSize = 24.sp
             )
 
             Text(
                 text = emptyData?.description.toString(),
                 fontSize = 12.sp,
-                color = Color.White,
+                color = MyAtSoptTheme.colors.black,
                 modifier = modifier
                     .alpha(0.5f)
             )
@@ -73,11 +77,11 @@ fun HistoryTabPagerScreen(
                     stringResource(id = R.string.text_history_empty_movie)
                 },
                 fontSize = 12.sp,
-                color = Color.White,
+                color = MyAtSoptTheme.colors.black,
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MyAtSoptTheme.typography.title,
                 modifier = modifier
-                    .border(1.dp, Color.White, RectangleShape)
+                    .border(1.dp, MyAtSoptTheme.colors.black, RectangleShape)
                     .padding(16.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .align(Alignment.Start)
@@ -93,8 +97,7 @@ fun HistoryTabPagerScreen(
         }
     } else {
         HistoryLazyGrid(
-            modifier = modifier
-                .fillMaxSize(),
+            modifier = modifier,
             historyList = historyList
         ) {
             if (it != null) {

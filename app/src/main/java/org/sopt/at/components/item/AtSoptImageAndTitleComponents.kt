@@ -1,8 +1,7 @@
 package org.sopt.at.components.item
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,25 +22,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import org.sopt.at.R
+import org.sopt.at.components.image.StableImage
 import org.sopt.at.models.history.HistoryEntity
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
+import org.sopt.designsystem.theme.MyAtSoptTheme
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AtSoptImageAndTitleComponents(
-    painter: Painter,
+    drawableResId: Int,
     contentDescription: String,
     item : HistoryEntity?,
     title: String,
@@ -54,14 +54,19 @@ fun AtSoptImageAndTitleComponents(
     cornerRadius: Dp = 16.dp,
     onLongClick : (HistoryEntity?) -> Unit? = {}
 ) {
+    //configuration 대신 windowinfo 사용 => compose에서 정한 dp값 대신 실제 기기 크기를 가져옴
+    val density = LocalDensity.current
+    val windowSizePx = LocalWindowInfo.current.containerSize
+    val windowSizeDp = with(density) { DpSize(windowSizePx.width.toDp(), windowSizePx.height.toDp()) }
+
+    val boxWidth = widthRatio?.let { windowSizeDp.width * it } ?: windowSizeDp.width
+    val boxHeight = windowSizeDp.height * heightRatio
+
     Box(
         modifier = modifier
-            .width(if (widthRatio != null) {
-                LocalConfiguration.current.screenWidthDp.dp * widthRatio
-            } else {
-                LocalConfiguration.current.screenWidthDp.dp
-            })
-            .height(LocalConfiguration.current.screenHeightDp.dp * heightRatio)
+            .animateContentSize()
+            .width(boxWidth)
+            .height(boxHeight)
             .padding(vertical = 16.dp)
             .clip(RoundedCornerShape(cornerRadius))
             .combinedClickable(
@@ -75,10 +80,10 @@ fun AtSoptImageAndTitleComponents(
         if (isNewData != null && isNewData) {
             Text (
                 text =  stringResource(R.string.text_home_top_twenty_new),
-                color = Color.White,
+                color = MyAtSoptTheme.colors.white,
                 modifier = modifier
                     .padding(top = 4.dp, start = 8.dp)
-                    .background(Color.Red, RoundedCornerShape(4.dp))
+                    .background(MyAtSoptTheme.colors.brand, RoundedCornerShape(4.dp))
                     .padding(horizontal = 4.dp)
                     .zIndex(1f),
                 fontSize = 11.sp,
@@ -86,8 +91,8 @@ fun AtSoptImageAndTitleComponents(
             )
         }
 
-        Image(
-            painter = painter,
+        StableImage(
+            drawableResId = drawableResId,
             contentDescription = contentDescription,
             modifier = modifier.matchParentSize(),
             contentScale = ContentScale.Crop
@@ -99,10 +104,10 @@ fun AtSoptImageAndTitleComponents(
                 .align(Alignment.BottomStart)
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.6f))
+                        colors = listOf(Color.Transparent, MyAtSoptTheme.colors.black.copy(alpha = 0.6f))
                     )
                 )
-                .height(LocalConfiguration.current.screenHeightDp.dp * 0.2f)
+                .height(boxHeight * 0.2f)
         )
 
         Column(
@@ -114,7 +119,7 @@ fun AtSoptImageAndTitleComponents(
         ) {
             Text(
                 text = title,
-                color = Color.White,
+                color = MyAtSoptTheme.colors.white,
                 modifier = modifier
                     .padding(start = 16.dp, bottom = 16.dp),
                 fontSize = 24.sp,
@@ -128,8 +133,8 @@ fun AtSoptImageAndTitleComponents(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.sopt_android),
+                    StableImage(
+                        drawableResId = R.drawable.sopt_android,
                         contentDescription = stringResource(R.string.text_home_item_only),
                         modifier = modifier
                             .size(20.dp)
@@ -137,7 +142,7 @@ fun AtSoptImageAndTitleComponents(
 
                     Text(
                         text = subtitle,
-                        color = Color.White,
+                        color = MyAtSoptTheme.colors.white,
                         modifier = modifier,
                         fontWeight = FontWeight.Bold
                     )
@@ -145,7 +150,7 @@ fun AtSoptImageAndTitleComponents(
             } else if (subtitle != null) {
                 Text(
                     text = subtitle,
-                    color = Color.White,
+                    color = MyAtSoptTheme.colors.white,
                     modifier = modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(16.dp)
@@ -168,7 +173,7 @@ fun HomeComponentsPreview() {
 
     ATSOPTANDROIDTheme {
         AtSoptImageAndTitleComponents(
-            painter = painterResource(R.drawable.ani_giant),
+            drawableResId = R.drawable.ani_giant,
             contentDescription = stringResource(R.string.home_banner_content_description),
             title = "테스트 타이틀",
             subtitle = "테스트 서브타이틀",
