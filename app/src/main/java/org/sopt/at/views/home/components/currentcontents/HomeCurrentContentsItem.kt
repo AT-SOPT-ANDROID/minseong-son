@@ -3,7 +3,6 @@ package org.sopt.at.views.home.components.currentcontents
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.sopt.at.R
@@ -18,7 +17,7 @@ fun HomeCurrentContentsItem(
     item: HomeTopAndCurrentEntity
 ) {
     AtSoptImageAndTitleComponents(
-        painter = painterResource(item.imageUrl?.toInt() ?: R.drawable.baseline_image_24),
+        drawableResId = item.imageUrl?.toInt() ?: R.drawable.baseline_image_24,
         contentDescription = stringResource(R.string.home_banner_content_description),
         title = item.title,
         subtitle = item.subtitle,

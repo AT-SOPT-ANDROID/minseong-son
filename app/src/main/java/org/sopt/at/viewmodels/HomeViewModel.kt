@@ -29,6 +29,10 @@ class HomeViewModel @Inject constructor(
     private val _route = MutableStateFlow(Screen.Home.route)
     val route = _route.asStateFlow()
 
+    init {
+        fetchHomeTab(HomeTabEntity(tab = CommonConstants.EMPTY_STRING))
+    }
+
     fun fetchHomeTab(tab : HomeTabEntity) {
         _homeTab.value = tab
     }
