@@ -29,22 +29,20 @@ fun NavigationGraph(
     historyViewModel: HistoryViewModel = hiltViewModel(),
 ) {
     val isLoggedIn by signInViewModel.isLoggedIn.collectAsState(initial = false)
+    val destination = if (isLoggedIn == true) Screen.Home.route else Screen.SignIn.route
 
     LaunchedEffect(isLoggedIn) {
-        if (isLoggedIn == true) {
-            navController.navigate(Screen.Home.route) {
-                popUpTo(Screen.SignIn.route) { inclusive = true }
-            }
-        } else {
-            navController.navigate(Screen.SignIn.route) {
-                popUpTo(Screen.Home.route) { inclusive = true }
+
+        navController.navigate(destination) {
+            popUpTo(destination) {
+                inclusive = true
             }
         }
     }
 
     NavHost(
         navController = navController,
-        startDestination = if (isLoggedIn == true) Screen.Home.route else Screen.SignIn.route
+        startDestination = destination
     ) {
         //로그인
         composable(Screen.SignIn.route) {
