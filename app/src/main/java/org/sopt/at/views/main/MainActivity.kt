@@ -1,132 +1,66 @@
 package org.sopt.at.views.main
 
-import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.at.R
+import org.sopt.at.components.dialogs.DialogType
+import org.sopt.at.components.dialogs.ExitDialog
+import org.sopt.at.views.history.components.tab.HistoryTabData
+import org.sopt.at.components.topappbar.BackOnlyTopAppBar
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
-import org.sopt.at.utils.PreferenceDataStore
-import org.sopt.at.views.signin.SignInActivity
+import org.sopt.at.viewmodels.HistoryViewModel
+import org.sopt.at.viewmodels.MainViewModel
+import org.sopt.at.views.navigation.Screen
+import org.sopt.designsystem.theme.AtSpotANDROIDTheme
+import org.sopt.designsystem.theme.MyAtSoptTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private var email : String? = null
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        email = intent.getStringExtra("email")
-
         setContent {
-            ATSOPTANDROIDTheme {
-                val interactionSource = remember { MutableInteractionSource() }
-                val emailState by PreferenceDataStore.getEmail(this@MainActivity)
-                    .collectAsState(initial = "")
-
-                Scaffold(
-                    topBar = {
-                        Row (
-                            modifier = Modifier.fillMaxWidth()
-                                .padding(WindowInsets.statusBars.asPaddingValues()) //status bar 밑에 위치하도록
-                        ){
-                            IconButton(
-                                onClick = {
-                                    finish()
-                                },
-                                interactionSource = interactionSource,
-                            ) {
-                                Icon(
-                                    Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                                    contentDescription = "뒤로가기"
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.weight(1f))
-
-                            IconButton(
-                                onClick = {
-                                    Toast.makeText(this@MainActivity, "다음 업데이트를 기대해주세요.", Toast.LENGTH_SHORT).show()
-                                }
-                            ) {
-                                Icon(
-                                    Icons.Default.Notifications,
-                                    contentDescription = "알림"
-                                )
-                            }
-
-                            IconButton(
-                                onClick = {
-                                    Toast.makeText(this@MainActivity, "다음 업데이트를 기대해주세요.", Toast.LENGTH_SHORT).show()
-                                },
-                                interactionSource = interactionSource
-                            ) {
-                                Icon(
-                                    Icons.Default.Settings,
-                                    contentDescription = "세팅"
-                                )
-                            }
-                        }
-                    },
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
-                    HomeScreen(
-                        interactionSource = interactionSource,
-                        profileEmail = email ?: emailState,
-                        paddingValues = innerPadding
+            AtSpotANDROIDTheme {
+                Surface (
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MyAtSoptTheme.colors.white),
+                    color = MyAtSoptTheme.colors.white
+                ) {
+                    MainContent (
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MyAtSoptTheme.colors.white)
                     ) {
-                        //로그아웃 시 클리어
-                        lifecycleScope.launch {
-                            PreferenceDataStore.setEmail(this@MainActivity, "")
-                            PreferenceDataStore.setPassword(this@MainActivity, "")
-                        }
-                        val intent = Intent(this@MainActivity, SignInActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                        }
-                        startActivity(intent)
+                        finish()
                     }
                 }
             }
@@ -134,85 +68,100 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
-fun HomeScreen(
-    interactionSource : MutableInteractionSource,
-    profileEmail : String?,
-    paddingValues: PaddingValues,
-    onLogOutClick : () -> Unit
+fun MainContent(
+    modifier: Modifier = Modifier,
+    viewModel : MainViewModel = hiltViewModel(),
+    historyViewModel: HistoryViewModel = hiltViewModel(),
+    onConfirm : () -> Unit = {},
 ) {
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    val historyTab by historyViewModel.historyTab.collectAsState()
 
-    Column (
-        modifier = Modifier.fillMaxSize().padding(paddingValues)
-    ){
-        Row (
-            modifier = Modifier.fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Image(
-                painter = painterResource(R.drawable.sopt_android),
-                contentDescription = "프로필 아이콘",
-            )
+    val dialogState by viewModel.dialogState.collectAsState()
 
-            Text(
-                text = "현재 이메일 : $profileEmail",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-            )
+    BackHandler {
+        if (!dialogState) {
+            viewModel.openDialog()
+        }
+    }
 
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = ""
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-
-            Box(
-                modifier = Modifier.wrapContentSize()
-                    .border(
-                        width = 1.dp,
-                        color = Color.White,
-                        shape = RoundedCornerShape(8.dp)
-                    ),
+    Scaffold(
+        bottomBar = {
+            if (currentRoute !in listOf(
+                Screen.SignUp.route,
+                Screen.SignIn.route
+                )
             ) {
-                Text(
-                    text = "프로필 전환",
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(4.dp)
+                MainBottomNavigation(
+                    modifier = Modifier,
+                    navController = navController
                 )
             }
+        },
+
+        topBar = {
+            if (currentRoute in listOf(
+                    Screen.SignUp.route,
+                    Screen.SignIn.route,
+                    Screen.Profile.route
+                )
+            ) {
+                BackOnlyTopAppBar(
+                    navController = navController
+                )
+            }
+        },
+
+        floatingActionButtonPosition = FabPosition.End,
+        floatingActionButton = {
+            if (currentRoute == Screen.History.route && historyTab == HistoryTabData.TAB_SERIES) {
+                FloatingActionButton(
+                    onClick = {
+                        historyViewModel.openHistoryDialog(DialogType.DIALOG_TYPE_CREATE)
+                    },
+                    modifier = Modifier.padding(end = 10.dp),
+                    containerColor = MyAtSoptTheme.colors.black,
+                    contentColor = MyAtSoptTheme.colors.white
+                ) {
+                    Icon(
+                        Icons.Default.Create,
+                        contentDescription = stringResource(R.string.floating_btn_create_content_description)
+                    )
+                }
+            }
+        }
+    ) {
+        Box(modifier.padding(it)) {
+            NavigationGraph(
+                navController = navController,
+                modifier = Modifier,
+                historyViewModel = historyViewModel,
+            )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
 
-        Button(
-            onClick = {
-                onLogOutClick()
-            },
-            //enabled = isValueCheck.split(" ").first().toBoolean(),
-            shape = RectangleShape,
-            border = BorderStroke(1.dp, Color.White),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-            modifier = Modifier
-                //.align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(16.dp),
-            interactionSource = interactionSource
-        ) {
-            Text(text = "로그아웃", fontSize = 14.sp, color = Color.White)
+        if (dialogState) {
+            ExitDialog(
+                onConfirm = {
+                    onConfirm()
+                },
+                onDismiss = {
+                    viewModel.closeDialog()
+                }
+            )
         }
+
     }
 }
 
-//리플 제거 확장함수
-fun Modifier.noRippleClickable(
-    enabled: Boolean = true,
-    onClick: () -> Unit
-): Modifier = this.clickable(
-    enabled = enabled,
-    interactionSource = null,
-    indication = null,
-    onClick = onClick
-)
+@Preview(showBackground = true)
+@Composable
+fun MainPreview() {
+    ATSOPTANDROIDTheme(dynamicColor = false) {
+        MainContent()
+    }
+}

@@ -2,6 +2,11 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    id("kotlin-kapt")
+    //id("com.google.devtools.ksp")
+    id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -40,7 +45,15 @@ android {
 }
 
 dependencies {
+    implementation(project(":designsystem"))
+
     implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.hilt.android.v252)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(project(":designsystem"))
+    kapt(libs.hilt.compiler.v252)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -54,6 +67,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
