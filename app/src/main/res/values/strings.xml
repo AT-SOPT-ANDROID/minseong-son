@@ -33,8 +33,13 @@
     <string name="text_history_empty_movie">영화 보러가기</string>
     <string name="dialog_history_hint">시리즈 이름</string>
     <string name="dialog_history_wrong">시리즈 이름을 입력해주세요.</string>
+    <string name="dialog_nickname_hint">닉네임</string>
+    <string name="dialog_nickname_wrong">닉네임을 입력해주세요.</string>
 
     <string name="floating_btn_create_content_description">Create Viewing History</string>
+
+    <!--search-->
+    <string name="hint_search">검색어를 입력해주세요.</string>
 
     <!--sign-->
     <string name="btn_sign_in">로그인 하기</string>
@@ -48,15 +53,18 @@
     <string name="btn_complete">완료</string>
     <string name="input_signup_email_title">아이디를 입력해주세요.</string>
     <string name="input_signup_password_title">비밀번호를 입력해주세요.</string>
+    <string name="input_signup_nickname_title">닉네임을 입력해주세요.</string>
 
 
     <string name="current_email">현재 이메일 : %1$s</string>
+    <string name="profile_empty_nickname">닉네임을 설정해주세요</string>
 
     <string name="msg_email">아이디</string>
     <string name="msg_password">비밀번호</string>
 
     <string name="msg_sign_up_email">영문 소문자 또는 영문 소문자, 숫자 조합 6~12 자리</string>
     <string name="msg_sign_up_password">영문, 숫자, 특수문자(~!@#$%^&amp;*) 조합 8~15 자리</string>
+    <string name="msg_sign_up_nickname">한글,영어,숫자 조합 1~20자리</string>
 
     <string name="password_gone_content_description">비밀번호 숨기기</string>
     <string name="password_visible_content_description">비밀번호 보이기</string>
@@ -72,6 +80,7 @@
     <string name="msg_validation_wrong_password_length">비밀번호는 8~15자여야 해요.</string>
     <string name="msg_validation_wrong_password">문자/숫자/특수문자(~!@#\$%^&amp;*)를 포함해야 해요.</string>
     <string name="msg_validation_wrong_both">로그인 되었습니다</string>
+    <string name="msg_validation_wrong_nickname">닉네임은 1~20자여야 해요.</string>
 
 
     <!--dialog-->
