@@ -56,7 +56,7 @@
     <string name="input_signup_nickname_title">닉네임을 입력해주세요.</string>
 
 
-    <string name="current_email">현재 이메일 : %1$s</string>
+    <string name="current_email">현재 닉네임 : %1$s</string>
     <string name="profile_empty_nickname">닉네임을 설정해주세요</string>
 
     <string name="msg_email">아이디</string>

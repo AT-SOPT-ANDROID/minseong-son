@@ -66,6 +66,8 @@ fun ProfileScreen(
     val currentNickname by profileViewModel.profileNickname.collectAsState()
     val currentUserId by PreferenceDataStore.getUserId(context = context).collectAsState(initial = CommonConstants.EMPTY_LONG)
 
+    val changedNickname by profileViewModel.profileChangedNickname.collectAsState()
+
     if (currentUserId != null && currentUserId != CommonConstants.EMPTY_LONG) {
         LaunchedEffect(Unit) {
             profileViewModel.getProfileNickname(currentUserId!!)
@@ -164,7 +166,7 @@ fun ProfileScreen(
     if (dialogState.isVisible) {
         AtSoptDialog(
             screen = Screen.Profile,
-            text = currentNickname ?: CommonConstants.EMPTY_STRING,
+            text = changedNickname ?: CommonConstants.EMPTY_STRING,
 
             onTextChanged = {
                 profileViewModel.onTextChangedProfileNickname(it.trim())

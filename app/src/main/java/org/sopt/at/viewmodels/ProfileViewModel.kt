@@ -21,8 +21,12 @@ class ProfileViewModel @Inject constructor(
     private val _profileNickname = MutableStateFlow<String?>(null)
     val profileNickname : StateFlow<String?> = _profileNickname.asStateFlow()
 
+    private val _profileChangedNickname = MutableStateFlow<String?>(null)
+    val profileChangedNickname : StateFlow<String?> = _profileChangedNickname.asStateFlow()
+
+
     fun onTextChangedProfileNickname(newText : String) {
-        _profileNickname.value = newText
+        _profileChangedNickname.value = newText
     }
 
     private val _patchNicknameMessage = MutableStateFlow<String?>(null)
@@ -51,6 +55,7 @@ class ProfileViewModel @Inject constructor(
             val newNickname = NicknameRequestDto(nickname)
             val result = userRepository.patchNickname(userId, newNickname)
             _patchNicknameMessage.value = result
+            getProfileNickname(userId)
         }
     }
 }

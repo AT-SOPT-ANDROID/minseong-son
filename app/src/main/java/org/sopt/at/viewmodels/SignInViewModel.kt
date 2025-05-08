@@ -1,7 +1,6 @@
 package org.sopt.at.viewmodels
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +29,8 @@ class SignInViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val repository: AuthRepository
 ) : ViewModel() {
+    private var hasCheckedLogin = false
+
     //ui state
     private val _signInState = MutableStateFlow(SignInUiState())
     val signInState = _signInState.asStateFlow()
@@ -44,7 +45,7 @@ class SignInViewModel @Inject constructor(
     val eventFlow : SharedFlow<UiEvent> = _eventFlow
 
     init {
-        checkLoggedIn()
+        checkLoggedInOnce()
     }
 
     fun onEvent(event: SignInEvent) {
@@ -148,5 +149,11 @@ class SignInViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun checkLoggedInOnce() {
+        if (hasCheckedLogin) return
+        hasCheckedLogin = true
+        checkLoggedIn()
     }
 }
