@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.at.R
 import org.sopt.at.core.common.CommonConstants
+import org.sopt.at.models.dto.request.SignInRequestDto
+import org.sopt.at.repository.AuthRepository
 import org.sopt.at.utils.PreferenceDataStore
 import org.sopt.at.views.navigation.Screen
 import org.sopt.at.views.signin.LoginResult
@@ -25,9 +27,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val repository: AuthRepository
 ) : ViewModel() {
-
     //ui state
     private val _signInState = MutableStateFlow(SignInUiState())
     val signInState = _signInState.asStateFlow()
@@ -74,7 +76,22 @@ class SignInViewModel @Inject constructor(
         val inputPw = _signInState.value.entity.password
 
         viewModelScope.launch {
-            val savedEmail = PreferenceDataStore.getEmail(context).firstOrNull() ?: CommonConstants.EMPTY_STRING
+            val result = repository.postSignIn(SignInRequestDto(inputEmail, inputPw))
+            val userId = result?.data?.userId
+
+            if (userId != null) {
+                PreferenceDataStore.setUserId(context, userId)
+                PreferenceDataStore.setEmail(context, inputEmail)
+                PreferenceDataStore.setPassword(context, inputPw)
+
+                _signInState.update { it.copy(loginResult = LoginResult.Success) }
+                _isLoggedIn.value = true
+                _eventFlow.emit(UiEvent.Navigate(Screen.Home.route))
+            } else {
+                _eventFlow.emit(UiEvent.ShowSnackbar("유저 정보가 없습니다."))
+            }
+
+            /*val savedEmail = PreferenceDataStore.getEmail(context).firstOrNull() ?: CommonConstants.EMPTY_STRING
             val savedPw = PreferenceDataStore.getPassword(context).firstOrNull() ?: CommonConstants.EMPTY_STRING
             val result = when {
                 inputEmail == savedEmail && inputPw == savedPw -> LoginResult.Success
@@ -83,9 +100,9 @@ class SignInViewModel @Inject constructor(
                 else -> {
                     LoginResult.BothWrong
                 }
-            }
+            }*/
 
-            if (result == LoginResult.Success) {
+            /*if (result == LoginResult.Success) {
                 _isLoggedIn.value = true
                 _eventFlow.emit(UiEvent.Navigate(Screen.Home.route))
             } else {
@@ -93,16 +110,12 @@ class SignInViewModel @Inject constructor(
                     LoginResult.WrongPassword -> context.getString(R.string.msg_wrong_password)
                     LoginResult.WrongEmail -> context.getString(R.string.msg_wrong_email)
                     LoginResult.BothWrong -> context.getString(R.string.msg_wrong_both)
-                    else -> ""
+                    else -> CommonConstants.EMPTY_STRING
                 }
                 _eventFlow.emit(UiEvent.ShowSnackbar(message))
-            }
+            }*/
 
-            _signInState.update {
-                it.copy(
-                    loginResult = result
-                )
-            }
+
         }
     }
 
@@ -127,7 +140,13 @@ class SignInViewModel @Inject constructor(
             val storedEmail = PreferenceDataStore.getEmail(context).firstOrNull()
             val storedPassword = PreferenceDataStore.getPassword(context).firstOrNull()
 
-            _isLoggedIn.value = !storedEmail.isNullOrEmpty() && !storedPassword.isNullOrEmpty()
+            if (storedEmail != null && storedPassword != null) {
+                val result = repository.postSignIn(SignInRequestDto(storedEmail, storedPassword))
+
+                if (result?.success == true) {
+                    _isLoggedIn.value = true
+                }
+            }
         }
     }
 }
