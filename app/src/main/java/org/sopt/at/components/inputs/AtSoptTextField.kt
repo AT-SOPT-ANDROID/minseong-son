@@ -72,6 +72,7 @@ fun AtSoptTextField(
             keyboardType = when (type) {
                 LoginFieldType.EMAIL -> KeyboardType.Email
                 LoginFieldType.PASSWORD -> KeyboardType.Password
+                LoginFieldType.NICKNAME -> KeyboardType.Text
             },
             imeAction = if (type == LoginFieldType.EMAIL) ImeAction.Next else ImeAction.Done
         ),
@@ -117,6 +118,7 @@ fun AtSoptTextField(
                                 }
                             }
                         }
+
                         LoginFieldType.PASSWORD -> {
                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                 Icon(
@@ -132,6 +134,9 @@ fun AtSoptTextField(
                                     tint = MyAtSoptTheme.colors.black
                                 )
                             }
+                        }
+
+                        else -> {
                         }
                     }
                 },

@@ -21,7 +21,14 @@ object AuthValidator {
     fun validatePassword(pw: String): ValidationResult {
         return when {
             pw.length !in 8..15 -> ValidationResult(false, R.string.msg_validation_wrong_password_length)
-            !pw.matches(passwordRegex) -> ValidationResult(false, R.string.msg_validation_wrong_password)
+            //!pw.matches(passwordRegex) -> ValidationResult(false, R.string.msg_validation_wrong_password)
+            else -> ValidationResult(true)
+        }
+    }
+
+    fun validateNickname(nickname: String): ValidationResult {
+        return when {
+            nickname.length !in 2..10 -> ValidationResult(false, R.string.msg_validation_wrong_nickname)
             else -> ValidationResult(true)
         }
     }
