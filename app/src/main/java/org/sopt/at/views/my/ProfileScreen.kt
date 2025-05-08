@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,10 +26,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,10 +38,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import org.sopt.at.R
+import org.sopt.at.components.dialogs.AtSoptDialog
 import org.sopt.at.components.image.StableImage
 import org.sopt.at.core.common.CommonConstants
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import org.sopt.at.utils.PreferenceDataStore
+import org.sopt.at.viewmodels.ProfileViewModel
 import org.sopt.at.viewmodels.SignInViewModel
 import org.sopt.at.views.navigation.Screen
 import org.sopt.at.views.signin.LoginResult
@@ -53,12 +54,23 @@ import org.sopt.designsystem.theme.MyAtSoptTheme
 fun ProfileScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    signInViewModel: SignInViewModel = hiltViewModel()
+    signInViewModel: SignInViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val loginState by signInViewModel.signInState.collectAsState()
+    val dialogState by profileViewModel.nicknameDialogState.collectAsState()
+
     val context = LocalContext.current
-    val currentEmail by PreferenceDataStore.getEmail(context = context).collectAsState(initial = CommonConstants.EMPTY_STRING)
+
+    val currentNickname by profileViewModel.profileNickname.collectAsState()
+    val currentUserId by PreferenceDataStore.getUserId(context = context).collectAsState(initial = CommonConstants.EMPTY_LONG)
+
+    if (currentUserId != null && currentUserId != CommonConstants.EMPTY_LONG) {
+        LaunchedEffect(Unit) {
+            profileViewModel.getProfileNickname(currentUserId!!)
+        }
+    }
 
     LaunchedEffect(loginState.loginResult) {
         if (loginState.loginResult == LoginResult.LogOut) {
@@ -73,26 +85,40 @@ fun ProfileScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MyAtSoptTheme.colors.white)
-    ){
+    ) {
         Row (
             modifier = modifier.fillMaxWidth()
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             StableImage(
                 drawableResId = R.drawable.sopt_android,
                 contentDescription = stringResource(R.string.profile_icon_content_description)
             )
 
-            Text(
-                text = stringResource(R.string.current_email, currentEmail.toString()),
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-            )
+            if (!currentNickname.isNullOrEmpty()) {
+                Text(
+                    text = stringResource(R.string.current_email, currentNickname!!),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                )
+            } else {
+                Text(
+                    text = stringResource(R.string.profile_empty_nickname),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                )
+            }
+
+            Spacer(modifier = modifier.width(5.dp))
 
             Icon(
                 imageVector = Icons.Default.Edit,
-                contentDescription = ""
+                contentDescription = CommonConstants.EMPTY_STRING,
+                modifier = modifier
+                    .clickable {
+                        profileViewModel.openDialog(Screen.Profile.toString())
+                    }
             )
 
             Spacer(modifier = modifier.weight(1f))
@@ -132,6 +158,26 @@ fun ProfileScreen(
                     signInViewModel.onEvent(SignInEvent.LogOutClicked)
                 },
             textAlign = TextAlign.Center
+        )
+    }
+
+    if (dialogState.isVisible) {
+        AtSoptDialog(
+            screen = Screen.Profile,
+            text = currentNickname ?: CommonConstants.EMPTY_STRING,
+
+            onTextChanged = {
+                profileViewModel.onTextChangedProfileNickname(it.trim())
+            },
+
+            onConfirm = {
+                profileViewModel.patchNickname(currentUserId!!, it)
+                profileViewModel.closeDialog()
+            },
+
+            onDismiss = {
+                profileViewModel.closeDialog()
+            }
         )
     }
 }
