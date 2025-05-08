@@ -114,11 +114,16 @@ fun HistoryScreen(
             DeleteDialog (
                 item = historyDeleteData!!,
                 onConfirm = { item ->
-                    viewModel.deleteHistoryData(item)
+                    if (item != null) {
+                        viewModel.deleteHistoryData(item)
+                    }
                     viewModel.closeHistoryDialog()
                 },
                 onDismiss = {
                     viewModel.closeHistoryDialog()
+                },
+                textContent = {
+
                 }
             )
         }
