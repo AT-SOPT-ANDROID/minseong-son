@@ -75,13 +75,14 @@
     <string name="msg_wrong_email">이메일이 일치하지 않습니다.</string>
     <string name="msg_wrong_both">이메일과 비밀번호가 모두 일치하지 않습니다.</string>
     <string name="msg_log_out">로그아웃 되었습니다</string>
-    <string name="msg_validation_wrong_email_length">아이디는 6~12자여야 해요.</string>
-    <string name="msg_validation_wrong_email">아이디는 영소문자와 숫자만 사용 가능해요.</string>
-    <string name="msg_validation_wrong_password_length">비밀번호는 8~15자여야 해요.</string>
-    <string name="msg_validation_wrong_password">문자/숫자/특수문자(~!@#\$%^&amp;*)를 포함해야 해요.</string>
-    <string name="msg_validation_wrong_both">로그인 되었습니다</string>
-    <string name="msg_validation_wrong_nickname">닉네임은 1~20자여야 해요.</string>
 
+    <string name="msg_validation_wrong_email_length">아이디는 6~12자여야 해요.</string>
+    <string name="msg_validation_wrong_email">아이디는 대문자/소문자/숫자만 사용 가능하며 8자 ~ 20자여야 해요.</string> <!--아이디는 대문자/소문자/숫자만 사용 가능하며 8자 ~ 20자-->
+    <string name="msg_validation_wrong_password_length">비밀번호는 8~15자여야 해요.</string>
+    <string name="msg_validation_wrong_password">비밀번호는 대문자/소문자/숫자만 사용 가능하며 8자 ~ 20자여야 해요.</string> <!--문자/숫자/특수문자(~!@#\$%^&amp;*)를 포함해야 해요.-->
+    <string name="msg_validation_wrong_nickname">닉네임은 한글/영어/숫자만 사용 가능하며 1자 ~ 20자여야 해요.</string>
+
+    <string name="msg_validation_wrong_both">로그인 되었습니다</string>
 
     <!--dialog-->
     <string name="dialog_title_exit">종료하시겠습니까?</string>
