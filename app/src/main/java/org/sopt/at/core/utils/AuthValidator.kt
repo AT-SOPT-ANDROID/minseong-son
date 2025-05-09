@@ -1,6 +1,5 @@
 package org.sopt.at.core.utils
 
-import android.util.Log
 import androidx.annotation.StringRes
 import org.sopt.at.R
 
