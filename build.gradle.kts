@@ -15,5 +15,6 @@ buildscript {
     dependencies {
         classpath(libs.hilt.android.gradle.plugin)
         classpath(libs.google.services)
+        classpath(libs.secrets.gradle.plugin)
     }
 }

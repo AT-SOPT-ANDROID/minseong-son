@@ -2,7 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("kotlin-kapt")
     //id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
@@ -41,18 +43,25 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
     implementation(project(":designsystem"))
+    //retrofit
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.kotlin.serialization)
+    implementation(libs.okhttp.logging)
+    implementation(libs.converter.gson)
 
     implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.hilt.navigation.compose)
     implementation(libs.hilt.android.v252)
     implementation(libs.androidx.runtime.livedata)
-    implementation(project(":designsystem"))
     kapt(libs.hilt.compiler.v252)
 
     implementation(libs.androidx.core.ktx)
@@ -75,4 +84,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.default.properties"
 }

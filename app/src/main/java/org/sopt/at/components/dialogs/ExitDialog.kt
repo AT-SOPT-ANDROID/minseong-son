@@ -21,7 +21,7 @@ fun ExitDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    AtSoptDialog(
+    DeleteDialog (
         item = null,
         modifier = modifier,
         onConfirm = {
